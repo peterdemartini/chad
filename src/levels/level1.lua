@@ -14,11 +14,9 @@ function scene:create( event )
 	background.anchorY = 0
 	background:setFillColor( .5 )
 
-	local crate = display.newImageRect( "images/crate.png", 90, 90 )
-	crate.x, crate.y = 160, -100
-	crate.rotation = 15
-
-	physics.addBody( crate, { density=1.0, friction=0.3, bounce=0.3 } )
+	local chad = display.newImageRect( "images/chad/chad-256x256.png", 100, 100 )
+	chad.x, chad.y = 160, 82
+	physics.addBody( chad, { density=1.0, friction=0.5, bounce=0.3 } )
 
 	local grass = display.newImageRect( "images/grass.png", screenW, 82 )
 	grass.anchorX = 0
@@ -30,7 +28,7 @@ function scene:create( event )
 
 	sceneGroup:insert( background )
 	sceneGroup:insert( grass)
-	sceneGroup:insert( crate )
+	sceneGroup:insert( chad )
 end
 
 

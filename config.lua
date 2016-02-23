@@ -7,9 +7,9 @@ application =
 		scale = "letterBox",
 		fps = 30,
 
-		imageSuffix =
-		{
-			["@2x"] = 2,
-		},
+		-- imageSuffix =
+		-- {
+		-- 	["@2x"] = 2,
+		-- },
 	},
 }
