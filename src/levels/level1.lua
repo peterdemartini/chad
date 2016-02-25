@@ -1,35 +1,28 @@
-local composer = require "composer"
+local composer = require 'composer'
 local scene = composer.newScene()
 
-local physics = require "physics"
+local physics = require 'physics'
 physics.start(); physics.pause()
 
-local ChadCharacter = require "src.characters.chad"
+local ChadCharacter = require 'src.characters.chad'
+local Ground = require 'src.background.ground'
+local Background = require 'src.background.background'
 
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
 local groundHeight = 82
 local chad = ChadCharacter.new(0, screenH - groundHeight)
 
-function scene:create( event )
+function scene:create(event)
 	local sceneGroup = self.view
 
-	local background = display.newRect( 0, 0, screenW, screenH )
-	background.anchorX = 0
-	background.anchorY = 0
-	background:setFillColor( .5 )
+	local background = Background.new()
+	local ground = Ground.new(groundHeight)
 
+	ground.addBody()
 	chad.addBody()
 
-	local ground = display.newImageRect( "images/ground.png", screenW, groundHeight )
-	ground.anchorX = 0
-	ground.anchorY = 1
-	ground.x, ground.y = 0, screenH
-
-	local groundShape = { -halfW,-55, halfW,-55, halfW,55, -halfW,55 }
-	physics.addBody( ground, "static",  {friction=1.0, density=1.0, bounce=0, shape=groundShape} )
-
-	sceneGroup:insert( background )
-	sceneGroup:insert( ground)
+	sceneGroup:insert(background.getBody())
+	sceneGroup:insert(ground.getBody())
 	sceneGroup:insert(chad.getBody())
 end
 
@@ -72,7 +65,6 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
 
 local function onScreenTouch( event )
   if event.phase == "began" then
