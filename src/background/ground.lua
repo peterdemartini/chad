@@ -14,6 +14,8 @@ function Ground.new(groundHeight)
   self.body.anchorY = 1
   self.body.x, self.body.y = 0, screenH
 
+  self.body.name = "ground"
+
   self.getBody = function()
     return self.body;
   end
