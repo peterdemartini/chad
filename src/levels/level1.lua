@@ -1,10 +1,14 @@
-local composer = require( "composer" )
+local composer = require "composer"
 local scene = composer.newScene()
 
 local physics = require "physics"
 physics.start(); physics.pause()
 
+local ChadCharacter = require "src.characters.chad"
+
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
+local groundHeight = 82
+local chad = ChadCharacter.new(0, screenH - groundHeight)
 
 function scene:create( event )
 	local sceneGroup = self.view
@@ -14,21 +18,19 @@ function scene:create( event )
 	background.anchorY = 0
 	background:setFillColor( .5 )
 
-	local chad = display.newImageRect( "images/chad/chad-256x256.png", 100, 100 )
-	chad.x, chad.y = 160, 82
-	physics.addBody( chad, { density=1.0, friction=0.5, bounce=0.3 } )
+	chad.addBody()
 
-	local grass = display.newImageRect( "images/grass.png", screenW, 82 )
-	grass.anchorX = 0
-	grass.anchorY = 1
-	grass.x, grass.y = 0, display.contentHeight
+	local ground = display.newImageRect( "images/ground.png", screenW, groundHeight )
+	ground.anchorX = 0
+	ground.anchorY = 1
+	ground.x, ground.y = 0, screenH
 
-	local grassShape = { -halfW,-34, halfW,-34, halfW,34, -halfW,34 }
-	physics.addBody( grass, "static", { friction=0.3, shape=grassShape } )
+	local groundShape = { -halfW,-55, halfW,-55, halfW,55, -halfW,55 }
+	physics.addBody( ground, "static",  {friction=1.0, density=1.0, bounce=0, shape=groundShape} )
 
 	sceneGroup:insert( background )
-	sceneGroup:insert( grass)
-	sceneGroup:insert( chad )
+	sceneGroup:insert( ground)
+	sceneGroup:insert(chad.getBody())
 end
 
 
@@ -70,5 +72,16 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+
+
+local function onScreenTouch( event )
+  if event.phase == "began" then
+		chad.actionJump()
+  end
+
+  return true
+end
+
+Runtime:addEventListener("touch", onScreenTouch)
 
 return scene
