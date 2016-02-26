@@ -4,6 +4,9 @@ ChadCharacter = {}
 
 function ChadCharacter.new(x, y)
 	local self = {};
+
+	self.jumping = false
+	self.moving = false
   self.WIDTH = 128
   self.HEIGHT = 128
   self.body = display.newImage("images/chad/Chad-Dino-128x128.png")
@@ -27,7 +30,10 @@ function ChadCharacter.new(x, y)
     return "dynamic";
   end
 
-  self.actionJump = function()
+  self.actionFire = function()
+  end
+
+	self.actionJump = function()
 		if self.jumping then
 			return
 		end
@@ -37,6 +43,43 @@ function ChadCharacter.new(x, y)
 
 	self.actionEndJump = function()
 		self.jumping = false
+	end
+
+	self.actionEndMove = function()
+		self.moving = false
+	end
+
+	self.actionMove = function(direction)
+		if self.jumping then
+			return
+		end
+		if self.moving then
+			return
+		end
+		self.moving = true
+		print("move direction", direction)
+		local force = 500
+		local xScale = 0
+		local forceX, forceY = 0, 0
+		if direction == 'leftleft' then
+			xScale = -1
+			forceX = force * -2
+		end
+		if direction == 'left' then
+			xScale = -1
+			forceX = -force
+		end
+		if direction == 'right' then
+			xScale = 1
+			forceX = force
+		end
+		if direction == 'rightright' then
+			xScale = 1
+			forceX = force * 2
+		end
+
+		self.body.xScale = xScale
+		self.body:applyForce(forceX, forceY, self.body.x, self.body.y)
 	end
 
   self.addBody = function()

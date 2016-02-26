@@ -7,9 +7,11 @@ physics.start(); physics.pause()
 local ChadCharacter = require 'src.characters.chad'
 local Ground = require 'src.background.ground'
 local Background = require 'src.background.background'
+local Actions = require 'src.invisibles.actions'
 
 local screenH = display.contentHeight
 local groundHeight = 82
+
 local chad = ChadCharacter.new(0, screenH - groundHeight)
 
 function scene:create(event)
@@ -61,29 +63,11 @@ function scene:destroy( event )
 	physics = nil
 end
 
-scene:addEventListener( "create", scene )
-scene:addEventListener( "show", scene )
-scene:addEventListener( "hide", scene )
-scene:addEventListener( "destroy", scene )
+scene:addEventListener("create", scene)
+scene:addEventListener("show", scene)
+scene:addEventListener("hide", scene)
+scene:addEventListener("destroy", scene)
 
-local function onCollision( event )
-  if(event.phase == "began") then
-		obj1Name, obj2Name = event.object1.name, event.object2.name
-    if(obj1Name == "ground" and obj2Name == "chad") then
-      chad.actionEndJump()
-    end
-  end
-end
-
-local function onScreenTouch( event )
-  if event.phase == "began" then
-		chad.actionJump()
-  end
-
-  return true
-end
-
-Runtime:addEventListener("collision", onCollision)
-Runtime:addEventListener("touch", onScreenTouch)
+Actions.new(chad)
 
 return scene
