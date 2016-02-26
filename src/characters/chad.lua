@@ -38,7 +38,18 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		self.jumping = true
-    self.body:applyForce(700, -1800, self.body.x, self.body.y)
+		local yForce, xForce = 0, 0
+		if self.body.xScale == 1 then
+			print("going forward")
+			yForce = -1800
+			xForce = 700
+		end
+		if self.body.xScale == -1 then
+			print("turned around")
+			yForce = 5000
+			xForce = -3000
+		end
+    self.body:applyForce(xForce, yForce, self.body.x, self.body.y)
   end
 
 	self.actionEndJump = function()
@@ -58,28 +69,32 @@ function ChadCharacter.new(x, y)
 		end
 		self.moving = true
 		print("move direction", direction)
-		local force = 500
+		local movement = 20
+		local x = self.body.x
 		local xScale = 0
-		local forceX, forceY = 0, 0
 		if direction == 'leftleft' then
 			xScale = -1
-			forceX = force * -2
+			x = x + ( movement * -2 )
 		end
 		if direction == 'left' then
 			xScale = -1
-			forceX = -force
+			x = x + ( -movement )
 		end
 		if direction == 'right' then
 			xScale = 1
-			forceX = force
+			x = x + ( movement )
 		end
 		if direction == 'rightright' then
 			xScale = 1
-			forceX = force * 2
+			x = x + ( movement * 2 )
 		end
 
-		self.body.xScale = xScale
-		self.body:applyForce(forceX, forceY, self.body.x, self.body.y)
+		transition.to(self.body, { x=x, xScale=xScale, time=100, transition=easing.inOutCubic,
+		  onComplete=function( object )
+				self.moving = false
+				print("DONE MOVING")
+		  end
+		})
 	end
 
   self.addBody = function()

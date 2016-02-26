@@ -50,10 +50,6 @@ function Actions.new(chad)
       end
     end
 
-    if event.phase == "ended" then
-      chad.actionEndMove()
-    end
-
     return true
   end
 
