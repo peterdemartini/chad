@@ -7,6 +7,7 @@ function ChadCharacter.new(x, y)
 
 	self.jumping = false
 	self.moving = false
+	self.facingForward = true
   self.WIDTH = 128
   self.HEIGHT = 128
   self.body = display.newImage("images/chad/Chad-Dino-128x128.png")
@@ -38,16 +39,13 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		self.jumping = true
-		local yForce, xForce = 0, 0
-		if self.body.xScale == 1 then
-			print("going forward")
+		local yForce, xForce
+		if self.facingForward then
 			yForce = -1800
 			xForce = 700
-		end
-		if self.body.xScale == -1 then
-			print("turned around")
-			yForce = 5000
-			xForce = -3000
+		else
+			yForce = 1800
+			xForce = -700
 		end
     self.body:applyForce(xForce, yForce, self.body.x, self.body.y)
   end
@@ -61,6 +59,7 @@ function ChadCharacter.new(x, y)
 	end
 
 	self.actionMove = function(direction)
+		print("move direction", direction)
 		if self.jumping then
 			return
 		end
@@ -68,26 +67,41 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		self.moving = true
-		print("move direction", direction)
 		local movement = 20
 		local x = self.body.x
-		local xScale = 0
+		local xScale, facingForward
 		if direction == 'leftleft' then
-			xScale = -1
 			x = x + ( movement * -2 )
+			facingForward = false
+			xScale = -1
 		end
 		if direction == 'left' then
-			xScale = -1
 			x = x + ( -movement )
+			facingForward = false
+			xScale = -1
 		end
 		if direction == 'right' then
-			xScale = 1
 			x = x + ( movement )
+			facingForward = true
+			xScale = 1
 		end
 		if direction == 'rightright' then
-			xScale = 1
 			x = x + ( movement * 2 )
+			facingForward = true
+			xScale = 1
 		end
+
+		if self.facingForward ~= facingForward then
+			print("switching direction", facingForward, self.facingForward)
+			switch = -1
+			if facingForward == false then
+				switch = 1
+			end
+			offset = self.WIDTH
+			x = x + (offset * switch)
+		end
+
+		self.facingForward = facingForward
 
 		transition.to(self.body, { x=x, xScale=xScale, time=100, transition=easing.inOutCubic,
 		  onComplete=function( object )

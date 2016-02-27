@@ -16,7 +16,7 @@ function Actions.new(chad)
   self.onCollision = function(event)
     if event.phase == "began" then
       obj1Name, obj2Name = event.object1.name, event.object2.name
-      if(obj1Name == "ground" and obj2Name == "chad") then
+      if obj1Name == "ground" and obj2Name == "chad" then
         chad.actionEndJump()
       end
     end
