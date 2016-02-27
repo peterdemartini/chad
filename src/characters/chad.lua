@@ -9,10 +9,10 @@ function ChadCharacter.new(x, y)
 	local self = {};
 
 	self.jumping = false
-  self.width = 100
-  self.height = 100
+  self.width = 76
+  self.height = 76
 	self.moveForward = true
-  self.body = display.newImage("images/chad/Chad-Dino-128x128.png")
+  self.body = display.newImage("images/chad/chad-still-76.png")
 
   self.body.anchorX = 0
   self.body.anchorY = 0

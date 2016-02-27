@@ -14,7 +14,7 @@ function Ground.new(groundHeight)
 
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
 
-  self.body.fill = {type="image", filename='images/ground.png'}
+  self.body.fill = {type="image", filename='images/level-1-ground.png'}
   -- display.setDefault("textureWrapX", "mirroredRepeat")
   self.body.anchorX = 0
   self.body.anchorY = 1

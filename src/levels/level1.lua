@@ -10,7 +10,7 @@ local Background = require 'src.background.background'
 local Actions = require 'src.invisibles.actions'
 
 local screenH = display.contentHeight
-local groundHeight = 82
+local groundHeight = 85
 
 local chad = ChadCharacter.new(0, screenH - groundHeight)
 
