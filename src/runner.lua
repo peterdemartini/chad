@@ -47,10 +47,16 @@ function scene:create(event)
 end
 
 function scene:enterFrame(event)
+	if currentFrame == nil then
+		return
+	end
 	local moveX = -2
 	local currentFrameX = frames[currentFrame].x
 	frames[currentFrame].x = currentFrameX + moveX
 	local nextFrame = currentFrame + 1
+	if layoutItems[nextFrame] == nil then
+		currentFrame = nil
+	end
 	if frames[nextFrame] == nil and layoutItems[nextFrame] ~= nil then
 		scene:buildFrame(nextFrame)
 		frames[nextFrame].x = frames[nextFrame].x + display.contentWidth
@@ -58,6 +64,7 @@ function scene:enterFrame(event)
 	if frames[nextFrame] ~= nil then
 		frames[nextFrame].x = frames[nextFrame].x + moveX
 		if frames[nextFrame].x == 0 then
+			layoutItems[currentFrame].destroy()
 			currentFrame = nextFrame
 		end
 	end
@@ -86,7 +93,12 @@ function scene:destroy( event )
 	for i = 1, #layoutItems do
 		local layout = layoutItems[i]
 		layout.destroy(sceneGroup)
+	 	if frames[i] ~= nil then
+			frames[i] = nil
+		end
 	end
+
+	Runtime:removeEventListener("enterFrame", scene)
 
 	actions.destroy()
 	chad.destroy()

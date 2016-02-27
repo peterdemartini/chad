@@ -19,11 +19,17 @@ function Plain.build(sceneGroup)
 end
 
 function Plain.destroy()
-  plainGrass.destroy()
-  plainGrass = nil
-  blueSky.destroy()
-  blueSky = nil
-  package[physics] = nil
+  if plainGrass ~= nil then
+    plainGrass.destroy()
+    plainGrass = nil
+  end
+  if blueSky ~= nil then
+    blueSky.destroy()
+    blueSky = nil
+  end
+  if package[physics] ~= nil then
+    package[physics] = nil
+  end
   physics = nil
 end
 
