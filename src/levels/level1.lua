@@ -17,11 +17,8 @@ local chad = ChadCharacter.new(0, screenH - groundHeight)
 function scene:create(event)
 	local sceneGroup = self.view
 
-	local background = Background.new()
+	local background = Background.new(groundHeight)
 	local ground = Ground.new(groundHeight)
-
-	ground.addBody()
-	chad.addBody()
 
 	sceneGroup:insert(background.getBody())
 	sceneGroup:insert(ground.getBody())

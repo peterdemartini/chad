@@ -1,21 +1,23 @@
 local physics = require "physics"
 
 ChadCharacter = {}
+local moveMargin = (display.contentWidth / 4)
+local tooFarX = display.contentWidth - moveMargin
+local tooCloseX = moveMargin
 
 function ChadCharacter.new(x, y)
 	local self = {};
 
 	self.jumping = false
-	self.moving = false
-	self.facingForward = true
-  self.WIDTH = 128
-  self.HEIGHT = 128
+  self.width = 100
+  self.height = 100
+	self.moveForward = true
   self.body = display.newImage("images/chad/Chad-Dino-128x128.png")
 
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x = x
-  self.body.y = y - self.HEIGHT
+  self.body.y = y - self.height
 
 	self.body.name = "chad"
 
@@ -23,15 +25,16 @@ function ChadCharacter.new(x, y)
     return self.body;
   end
 
-  self.getBodyOptions = function()
+  function getBodyOptions()
     return {friction=0.5, density=1.0, bounce=0.1, radius=35};
   end
 
-  self.getBodyType = function()
+	function getBodyType()
     return "dynamic";
   end
 
   self.actionFire = function()
+		print("firing")
   end
 
 	self.actionJump = function()
@@ -39,83 +42,51 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		self.jumping = true
-		local yForce, xForce
-		if self.facingForward then
-			yForce = -1800
-			xForce = 700
+		local facingForward = true
+		if facingForward then
+			xForce = 400
 		else
-			yForce = -1800
-			xForce = -700
+			xForce = -400
 		end
-    self.body:applyForce(xForce, yForce, self.body.x, self.body.y)
+		transition.cancel(self.movingTransition)
+    self.body:applyForce(xForce, -1500, self.body.x, self.body.y)
   end
 
 	self.actionEndJump = function()
 		self.jumping = false
 	end
 
-	self.actionEndMove = function()
-		self.moving = false
-	end
-
-	self.actionMove = function(direction)
-		print("move direction", direction)
-		if self.jumping then
-			return
-		end
-		if self.moving then
-			return
-		end
-		self.moving = true
-		local movement = 20
-		local x = self.body.x
-		local xScale, facingForward
-		if direction == 'leftleft' then
-			x = x + ( movement * -2 )
-			facingForward = false
-			xScale = -1
-		end
-		if direction == 'left' then
-			x = x + ( -movement )
-			facingForward = false
-			xScale = -1
-		end
-		if direction == 'right' then
-			x = x + ( movement )
-			facingForward = true
-			xScale = 1
-		end
-		if direction == 'rightright' then
-			x = x + ( movement * 2 )
-			facingForward = true
-			xScale = 1
-		end
-
-		if self.facingForward ~= facingForward then
-			print("switching direction", facingForward, self.facingForward)
-			switch = -1
-			if facingForward == false then
-				switch = 1
-			end
-			offset = self.WIDTH
-			x = x + (offset * switch)
-		end
-
-		self.facingForward = facingForward
-
-		transition.to(self.body, { x=x, xScale=xScale, time=100, transition=easing.inOutCubic,
-		  onComplete=function( object )
-				self.moving = false
-				print("DONE MOVING")
-		  end
-		})
-	end
-
-  self.addBody = function()
-    physics.addBody(self.getBody(), self.getBodyType(), self.getBodyOptions())
+  function addBody()
+    physics.addBody(self.getBody(), getBodyType(), getBodyOptions())
     self.body.isFixedRotation = true
     self.body.gravityScale = 2.0
   end
+
+	addBody()
+
+	function updateMoveForward()
+		xPos = self.body.x + self.width
+		if xPos >= tooFarX then
+			self.moveForward = false
+		end
+		if xPos <= tooCloseX then
+			self.moveForward = true
+		end
+	end
+
+	function animateBackground()
+		if self.jumping then
+			return
+		end
+		moveX = 30
+		if self.moveForward == false then
+			moveX = (moveX * 2) * -1
+		end
+		updateMoveForward()
+		self.movingTransition = transition.to(self.body, {time=1000, x=moveX, delta=true})
+	end
+	timer.performWithDelay(1000, animateBackground, 0)
+	animateBackground()
 
 	return self;
 end
