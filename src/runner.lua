@@ -21,13 +21,12 @@ function scene:create(event)
 	end
 
 	sceneGroup:insert(chad.getBody())
-
 end
 
 function scene:show( event )
 	local sceneGroup = self.view
 
-	if phase == "did" then
+	if event.phase == "did" then
 		physics.start()
 	end
 end
