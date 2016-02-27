@@ -12,7 +12,7 @@ function Background.new(groundHeight)
   self.height = 500
 
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
-  self.body.fill = {type="image", filename='images/level-1-background.png'}
+  self.body.fill = {type="image", filename='images/sky/blue-sky.png'}
 
   self.body.anchorX = 0
   self.body.anchorY = 0
