@@ -1,6 +1,8 @@
 local composer = require 'composer'
 local scene = composer.newScene()
 
+local widget = require "widget"
+
 local physics = require 'physics'
 physics.start(); physics.pause()
 
@@ -10,7 +12,13 @@ local Actions = require 'src.invisibles.actions'
 local layoutItems = require 'src.levels.one.layout'
 
 local screenH = display.contentHeight
-local chad = Chad.new(0, screenH - 75)
+local chad, actions
+
+local function onRestartEvent()
+	composer.removeScene("src.reloading")
+	composer.gotoScene("src.reloading", "fade", 500)
+	return true
+end
 
 function scene:create(event)
 	local sceneGroup = self.view
@@ -19,8 +27,18 @@ function scene:create(event)
 		local layout = layoutItems[i]
 	  layout.build(sceneGroup)
 	end
-
+	chad = Chad.new(0, screenH - 75)
 	sceneGroup:insert(chad.getBody())
+
+	restartButton = widget.newButton{
+		width=50, height=50,
+		defaultFile = "images/restart-button.png",
+		onRelease = onRestartEvent
+	}
+	restartButton.x = display.contentWidth - 50
+	restartButton.y = 50
+
+	actions = Actions.new(chad)
 end
 
 function scene:show( event )
@@ -40,18 +58,30 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-	-- Called prior to the removal of scene's "view" (sceneGroup)
 	local sceneGroup = self.view
 
+	for i = 1, #layoutItems do
+		local layout = layoutItems[i]
+		layout.destroy(sceneGroup)
+	end
+
+	actions.destroy()
+	chad.destroy()
+	chad = nil
+
 	package.loaded[physics] = nil
+	package.loaded[Chad] = nil
+	package.loaded[Actions] = nil
+	package.loaded[layoutItems] = nil
 	physics = nil
+	Chad = nil
+	Actions = nil
+	layoutItems = nil
 end
 
 scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 scene:addEventListener("destroy", scene)
-
-Actions.new(chad)
 
 return scene

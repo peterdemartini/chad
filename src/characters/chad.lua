@@ -1,12 +1,12 @@
-local physics = require "physics"
-
-ChadCharacter = {}
+local ChadCharacter = {}
 local moveMargin = (display.contentWidth / 4)
 local tooFarX = display.contentWidth - moveMargin
 local tooCloseX = moveMargin
 
 function ChadCharacter.new(x, y)
 	local self = {};
+
+	local physics = require "physics"
 
 	self.jumping = false
   self.width = 76
@@ -87,8 +87,15 @@ function ChadCharacter.new(x, y)
 		updateMoveForward()
 		self.movingTransition = transition.to(self.body, {time=1000, x=moveX, delta=true})
 	end
-	timer.performWithDelay(1000, animateBackground, 0)
+	local animateTimer = timer.performWithDelay(1000, animateBackground, 0)
 	animateBackground()
+
+	self.destroy = function()
+		package.loaded[physics] = nil
+		physics = nil
+		self.body = nil
+		timer.cancel(animateTimer)
+	end
 
 	return self;
 end

@@ -1,10 +1,10 @@
-local physics = require 'physics'
-
 local BlueSky = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
 function BlueSky.new()
+  local physics = require "physics"
+
   local self = {};
   self.width = screenW
   self.height = 500
@@ -19,6 +19,12 @@ function BlueSky.new()
 
   self.getBody = function()
     return self.body;
+  end
+
+  self.destroy = function()
+    package.loaded[physics] = nil
+    physics = nil
+    self.body = nil
   end
 
   return self;

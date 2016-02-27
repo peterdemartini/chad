@@ -1,10 +1,9 @@
-local physics = require 'physics'
-
 local PlainGrass = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
 function PlainGrass.new()
+  local physics = require 'physics'
   local self = {};
   self.width = screenW
   self.height = 85
@@ -35,6 +34,12 @@ function PlainGrass.new()
   end
 
   addBody()
+
+  self.destroy = function()
+    package.loaded[physics] = nil
+    physics = nil
+    self.body = nil
+  end
 
   return self;
 end

@@ -24,10 +24,15 @@ function Actions.new(chad)
     return true
   end
 
+  self.destroy = function()
+    Runtime:removeEventListener("collision", self.onCollision)
+    Runtime:removeEventListener("touch", self.onScreenTouch)
+  end
   Runtime:addEventListener("collision", self.onCollision)
   Runtime:addEventListener("touch", self.onScreenTouch)
 
   return self;
 end
+
 
 return Actions
