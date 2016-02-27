@@ -18,8 +18,8 @@ settings =
 	excludeFiles =
 	{
 		-- Include only the necessary icon files on each platform
-		iphone = { "images/icons/Icon-*dpi.png", },
-		android = { "images/icons/Icon.png", "images/icons/Icon-Small-*.png", "images/icons/Icon*@2x.png", },
+		iphone = { "images/icons/*dpi/*.png", },
+		android = { "images/icons/ios/*.png", "images/icons/Chad-Icon-*.png", "images/icons/Chad-Icon-*@2x.png", },
 	},
 
 	--
@@ -35,37 +35,29 @@ settings =
 
 			CFBundleIconFiles =
 			{
-				"images/icons/Icon.png",
-				"images/icons/Icon@2x.png",
-				"images/icons/Icon-167.png",
-				"images/icons/Icon-60.png",
-				"images/icons/Icon-60@2x.png",
-				"images/icons/Icon-60@3x.png",
-				"images/icons/Icon-72.png",
-				"images/icons/Icon-72@2x.png",
-				"images/icons/Icon-76.png",
-				"images/icons/Icon-76@2x.png",
-				"images/icons/Icon-Small.png",
-				"images/icons/Icon-Small@2x.png",
-				"images/icons/Icon-Small@3x.png",
-				"images/icons/Icon-Small-40.png",
-				"images/icons/Icon-Small-40@2x.png",
-				"images/icons/Icon-Small-50.png",
-				"images/icons/Icon-Small-50@2x.png",
+				"images/icons/Chad-Icon-144x144.png",
+				"images/icons/Chad-Icon-192x192.png",
+				"images/icons/Chad-Icon-24x24@2x.png",
+				"images/icons/Chad-Icon-27.5x27.5@2x.png",
+				"images/icons/Chad-Icon-29x29.png",
+				"images/icons/Chad-Icon-29x29@2x.png",
+				"images/icons/Chad-Icon-29x29@3x.png",
+				"images/icons/Chad-Icon-36x36.png",
+				"images/icons/Chad-Icon-40x40.png",
+				"images/icons/Chad-Icon-40x40@2x.png",
+				"images/icons/Chad-Icon-40x40@3x.png",
+				"images/icons/Chad-Icon-44x44@2x.png",
+				"images/icons/Chad-Icon-48x48.png",
+				"images/icons/Chad-Icon-512x512.png",
+				"images/icons/Chad-Icon-60x60@2x.png",
+				"images/icons/Chad-Icon-60x60@3x.png",
+				"images/icons/Chad-Icon-72x72.png",
+				"images/icons/Chad-Icon-76x76.png",
+				"images/icons/Chad-Icon-76x76@2x.png",
+				"images/icons/Chad-Icon-86x86@2x.png",
+				"images/icons/Chad-Icon-96x96.png",
+				"images/icons/Chad-Icon-98x98@2x.png"
 			},
-
-			--[[
-			-- iOS app URL schemes:
-			CFBundleURLTypes =
-			{
-				{
-					CFBundleURLSchemes =
-					{
-						"fbXXXXXXXXX",  -- replace XXXXXXXXX with your Facebook appId
-					}
-				}
-			}
-			--]]
 		}
 	},
 

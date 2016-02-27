@@ -19,7 +19,7 @@ function ChadCharacter.new(x, y)
   self.body.x = x
   self.body.y = y - self.height
 
-	self.body.name = "chad"
+	self.body.type = "chad"
 
   self.getBody = function()
     return self.body;
