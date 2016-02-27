@@ -8,8 +8,9 @@ function Actions.new(chad)
 
   self.onCollision = function(event)
     if event.phase == "began" then
-      obj1Type, obj2Type = event.object1.type, event.object2.type
-      if obj1Type == "ground" and obj2Type == "chad" then
+      obj1Name, obj2Name = event.object1.name, event.object2.name
+      if obj1Name == "ground" and obj2Name == "chad" then
+        print("collision, end jump")
         chad.actionEndJump()
       end
     end
@@ -17,7 +18,7 @@ function Actions.new(chad)
 
   self.onScreenTouch = function(event)
     if event.phase == "began" then
-      print("screen touch")
+      print("screen touch, jumping")
       chad.actionJump()
     end
     return true

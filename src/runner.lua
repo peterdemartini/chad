@@ -8,18 +8,15 @@ local Chad = require 'src.characters.chad'
 local Actions = require 'src.invisibles.actions'
 
 local screenH = display.contentHeight
-local chad = Chad.new(0, screenH - 85)
+local chad = Chad.new(0, screenH - 75)
 
 function scene:create(event)
 	local sceneGroup = self.view
 	layoutItems = require 'src.levels.one.layout'
 
 	for i = 1, #layoutItems do
-		local sections = layoutItems[i]
-		for n = 1, #sections do
-			local section = sections[n]
-		  sceneGroup:insert(section.body)
-		end
+		local layout = layoutItems[i]
+	  layout.build(sceneGroup)
 	end
 
 	sceneGroup:insert(chad.getBody())

@@ -19,7 +19,7 @@ function ChadCharacter.new(x, y)
   self.body.x = x
   self.body.y = y - self.height
 
-	self.body.type = "chad"
+	self.body.name = 'chad'
 
   self.getBody = function()
     return self.body;
@@ -38,6 +38,7 @@ function ChadCharacter.new(x, y)
   end
 
 	self.actionJump = function()
+		print("jumping")
 		if self.jumping then
 			return
 		end
@@ -53,6 +54,7 @@ function ChadCharacter.new(x, y)
   end
 
 	self.actionEndJump = function()
+		print("end jumping")
 		self.jumping = false
 	end
 

@@ -1,5 +1,5 @@
-plainSection = require 'src.sections.plain'
+Plain = require 'src.sections.plain'
 
 return {
-  plainSection
+  Plain
 }
