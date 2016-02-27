@@ -7,12 +7,13 @@ physics.start(); physics.pause()
 local Chad = require 'src.characters.chad'
 local Actions = require 'src.invisibles.actions'
 
+local layoutItems = require 'src.levels.one.layout'
+
 local screenH = display.contentHeight
 local chad = Chad.new(0, screenH - 75)
 
 function scene:create(event)
 	local sceneGroup = self.view
-	layoutItems = require 'src.levels.one.layout'
 
 	for i = 1, #layoutItems do
 		local layout = layoutItems[i]
@@ -20,6 +21,7 @@ function scene:create(event)
 	end
 
 	sceneGroup:insert(chad.getBody())
+
 end
 
 function scene:show( event )

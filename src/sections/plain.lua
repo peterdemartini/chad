@@ -1,7 +1,5 @@
 PlainGrass = require 'src.statics.plain-grass'
-BlueSky     = require 'src.statics.blue-sky'
-
-local physics = require 'physics'
+BlueSky    = require 'src.statics.blue-sky'
 
 local Plain = {}
 

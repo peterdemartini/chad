@@ -8,12 +8,10 @@ function PlainGrass.new()
   local self = {};
   self.width = screenW
   self.height = 85
-  -- self.body = display.newImageRect('images/ground.png', self.width, self.height)
 
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}
-  -- display.setDefault("textureWrapX", "mirroredRepeat")
   self.body.anchorX = 0
   self.body.anchorY = 1
   self.body.x, self.body.y = 0, screenH
