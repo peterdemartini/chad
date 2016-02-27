@@ -1,15 +1,21 @@
 PlainGrass = require 'src.statics.plain-grass'
 BlueSky    = require 'src.statics.blue-sky'
+physics    = require 'physics'
 
 local Plain = {}
 local blueSky, plainGrass
 
 function Plain.build(sceneGroup)
+  local group = display.newGroup()
+
   blueSky = BlueSky.new()
-  sceneGroup:insert(blueSky.getBody())
+  group:insert(blueSky.getBody())
 
   plainGrass = PlainGrass.new()
-  sceneGroup:insert(plainGrass.getBody())
+  group:insert(plainGrass.getBody())
+  sceneGroup:insert(group)
+
+  return group
 end
 
 function Plain.destroy()
@@ -17,6 +23,8 @@ function Plain.destroy()
   plainGrass = nil
   blueSky.destroy()
   blueSky = nil
+  package[physics] = nil
+  physics = nil
 end
 
 return Plain

@@ -13,6 +13,8 @@ local layoutItems = require 'src.levels.one.layout'
 
 local screenH = display.contentHeight
 local chad, actions
+local frames = {}
+local currentFrame = 1
 
 local function onRestartEvent()
 	composer.removeScene("src.reloading")
@@ -20,13 +22,16 @@ local function onRestartEvent()
 	return true
 end
 
+function scene:buildFrame(i)
+	local sceneGroup = self.view
+	frames[i] = layoutItems[i].build(sceneGroup)
+end
+
 function scene:create(event)
 	local sceneGroup = self.view
 
-	for i = 1, #layoutItems do
-		local layout = layoutItems[i]
-	  layout.build(sceneGroup)
-	end
+	scene:buildFrame(currentFrame)
+
 	chad = Chad.new(0, screenH - 75)
 	sceneGroup:insert(chad.getBody())
 
@@ -39,6 +44,24 @@ function scene:create(event)
 	restartButton.y = 50
 
 	actions = Actions.new(chad)
+end
+
+function scene:enterFrame(event)
+	local moveX = -2
+	local currentFrameX = frames[currentFrame].x
+	frames[currentFrame].x = currentFrameX + moveX
+	local nextFrame = currentFrame + 1
+	if frames[nextFrame] == nil and layoutItems[nextFrame] ~= nil then
+		scene:buildFrame(nextFrame)
+		frames[nextFrame].x = frames[nextFrame].x + display.contentWidth
+	end
+	if frames[nextFrame] ~= nil then
+		frames[nextFrame].x = frames[nextFrame].x + moveX
+		if frames[nextFrame].x == 0 then
+			currentFrame = nextFrame
+		end
+	end
+	chad.getBody():toFront()
 end
 
 function scene:show( event )
@@ -83,5 +106,7 @@ scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 scene:addEventListener("destroy", scene)
+
+Runtime:addEventListener("enterFrame", scene)
 
 return scene
