@@ -44,7 +44,7 @@ function ChadCharacter.new(x, y)
 			yForce = -1800
 			xForce = 700
 		else
-			yForce = 1800
+			yForce = -1800
 			xForce = -700
 		end
     self.body:applyForce(xForce, yForce, self.body.x, self.body.y)
