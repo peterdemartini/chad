@@ -1,7 +1,6 @@
 local ChadCharacter = {}
-local moveMargin = (display.contentWidth / 4)
-local tooFarX = display.contentWidth - moveMargin
-local tooCloseX = moveMargin
+local tooFarX = display.contentWidth - (display.contentWidth / 4)
+local tooCloseX = (display.contentWidth / 3) 
 
 function ChadCharacter.new(x, y)
 	local self = {};

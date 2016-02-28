@@ -13,6 +13,7 @@ function Plain.build(sceneGroup)
 
   plainGrass = PlainGrass.new()
   group:insert(plainGrass.getBody())
+
   sceneGroup:insert(group)
 
   return group

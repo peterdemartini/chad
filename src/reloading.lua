@@ -6,7 +6,7 @@ physics.start(); physics.pause()
 
 local function restart()
 	composer.removeScene("src.runner")
-	composer.gotoScene("src.runner", "fade", 500)
+	composer.gotoScene("src.runner", "fade", 20)
 	return true
 end
 
