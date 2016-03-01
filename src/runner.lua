@@ -25,6 +25,9 @@ local function onRestartEvent()
 end
 
 function scene:buildFrame(i)
+	if i == nil then
+		return
+	end
 	local sceneGroup = self.view
 	frames[i] = layoutItems[i].build(sceneGroup)
 end

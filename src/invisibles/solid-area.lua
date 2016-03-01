@@ -9,7 +9,7 @@ function SolidArea.new(x, y, width, height)
   self.height = height
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
 
-  -- self.body.fill =  { 1, 0.5, 0.3 }
+  self.body.fill =  { 1, 0.5, 0.3 }
   self.body.isVisible = false
   self.body.anchorX = 0
   self.body.anchorY = 0
@@ -35,19 +35,18 @@ function SolidArea.new(x, y, width, height)
 
   addBody()
 
-  local touchJoint = physics.newJoint("touch", self.getBody(), x, y)
-  touchJoint.maxForce = 100000
-  touchJoint.frequency = 100
-  touchJoint.dampingRatio = 1
+  self.body.touchJoint = physics.newJoint("touch", self.getBody(), x, y)
 
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil
+    self.body.touchJoint = nil
     self.body = nil
   end
 
   self.moveX = function(x)
-    touchJoint:setTarget(self.body.x + x, self.body.y)
+    self.body.x = self.body.x + x
+    self.body.touchJoint:setTarget(self.body.x + x, self.body.y)
   end
 
   return self;
