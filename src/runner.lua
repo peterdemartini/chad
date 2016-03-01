@@ -25,9 +25,6 @@ local function onRestartEvent()
 end
 
 function scene:buildFrame(i)
-	if i == nil then
-		return
-	end
 	local sceneGroup = self.view
 	frames[i] = layoutItems[i].build(sceneGroup)
 end
@@ -72,7 +69,7 @@ function scene:create(event)
 end
 
 function scene:enterFrame(event)
-	if currentFrame == nil then
+	if currentFrame == nil or frames[currentFrame] == nil then
 		return
 	end
 	local moveSize = 2
@@ -120,9 +117,6 @@ function scene:destroy( event )
 		local frame = frames[i]
 		frame.destroy(sceneGroup)
 		frame[i] = nil
-	 	if layoutItems[i] ~= nil then
-			layoutItems[i] = nil
-		end
 	end
 
 	for i = 1, #fixedStatics do
