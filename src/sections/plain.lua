@@ -1,10 +1,7 @@
 PlainGrass = require 'src.statics.plain-grass'
 BlueSky    = require 'src.statics.blue-sky'
-physics    = require 'physics'
 
 local Plain = {}
-local blueSky, plainGrass
-local chunks = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 math.randomseed(os.time())
@@ -16,40 +13,41 @@ function generateChunk()
 end
 
 function Plain.build(sceneGroup)
-  local group = display.newGroup()
+  local physics = require 'physics'
+  local self = {}
+  self.items = {}
+  self.items[1] = BlueSky.new()
+  sceneGroup:insert(self.items[1].getBody())
 
-  blueSky = BlueSky.new()
-  group:insert(blueSky.getBody())
+  self.items[2] = PlainGrass.new(0, screenH, screenW, 85)
+  sceneGroup:insert(self.items[2].getBody())
 
-  plainGrass = PlainGrass.new(0, screenH, screenW, 85)
-  group:insert(plainGrass.getBody())
+  self.items[3] = generateChunk()
+  sceneGroup:insert(self.items[3].getBody())
+  sceneGroup:insert(self.items[3].getSolidBody())
 
-  chunks[1] = generateChunk()
-  group:insert(chunks[1].getBody())
-  group:insert(chunks[1].getSolidBody())
-
-  sceneGroup:insert(group)
-
-  return group
-end
-
-function Plain.destroy()
-  if plainGrass ~= nil then
-    plainGrass.destroy()
-    plainGrass = nil
+  self.destroy = function()
+    for i=1, #self.items do
+      self.items[i].destroy()
+      self.items[i] = nil
+    end
+    if package[physics] ~= nil then
+      package[physics] = nil
+    end
+    physics = nil
   end
-  if blueSky ~= nil then
-    blueSky.destroy()
-    blueSky = nil
+
+  self.moveX = function(x)
+    for i=1, #self.items do
+      local body = self.items[i].getBody()
+      body.x = body.x + x
+    end
   end
-  for i=1, #chunks do
-    chunks[i].destroy()
-    chunks[i] = nil
+
+  self.getX = function()
+    return self.items[1].getBody().x
   end
-  if package[physics] ~= nil then
-    package[physics] = nil
-  end
-  physics = nil
+  return self
 end
 
 return Plain

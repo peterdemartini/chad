@@ -74,20 +74,19 @@ function scene:enterFrame(event)
 	end
 	local moveSize = 2
 	local moveX = -1 * moveSize
-	local currentFrameX = frames[currentFrame].x
-	frames[currentFrame].x = currentFrameX + moveX
+	frames[currentFrame].moveX(moveX)
 	local nextFrame = currentFrame + 1
 	if layoutItems[nextFrame] == nil then
 		currentFrame = nil
 	end
 	if frames[nextFrame] == nil and layoutItems[nextFrame] ~= nil then
 		scene:buildFrame(nextFrame)
-		frames[nextFrame].x = frames[nextFrame].x + display.contentWidth
+		frames[nextFrame].moveX(display.contentWidth)
 	end
 	if frames[nextFrame] ~= nil then
-		frames[nextFrame].x = frames[nextFrame].x + moveX
-		if frames[nextFrame].x == 0 then
-			layoutItems[currentFrame].destroy()
+		frames[nextFrame].moveX(moveX)
+		if frames[nextFrame].getX() == 0 then
+			frames[currentFrame].destroy()
 			currentFrame = nextFrame
 		end
 	end
@@ -114,11 +113,12 @@ end
 function scene:destroy( event )
 	local sceneGroup = self.view
 
-	for i = 1, #layoutItems do
-		local layout = layoutItems[i]
-		layout.destroy(sceneGroup)
-	 	if frames[i] ~= nil then
-			frames[i] = nil
+	for i = 1, #frames do
+		local frame = frames[i]
+		frame.destroy(sceneGroup)
+		frame[i] = nil
+	 	if layoutItems[i] ~= nil then
+			layoutItems[i] = nil
 		end
 	end
 
