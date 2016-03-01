@@ -128,7 +128,6 @@ function scene:destroy( event )
 		fixedStatics[i] = nil
 	end
 
-
 	Runtime:removeEventListener("enterFrame", scene)
 
 	actions.destroy()

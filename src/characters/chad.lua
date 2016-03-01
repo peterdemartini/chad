@@ -1,6 +1,6 @@
 local ChadCharacter = {}
 local tooFarX = display.contentWidth - (display.contentWidth / 4)
-local tooCloseX = (display.contentWidth / 3) 
+local tooCloseX = (display.contentWidth / 3)
 
 function ChadCharacter.new(x, y)
 	local self = {};
@@ -13,6 +13,7 @@ function ChadCharacter.new(x, y)
 	self.moveForward = true
   self.body = display.newImage("images/chad/chad-still-76.png")
 
+	-- self.body.fill = { 1, 0, 0.5 }
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x = x

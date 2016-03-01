@@ -8,8 +8,9 @@ function Actions.new(chad)
 
   self.onCollision = function(event)
     if event.phase == "began" then
-      obj1Name, obj2Name = event.object1.name, event.object2.name
-      if obj1Name == "ground" and obj2Name == "chad" then
+      local obj1Name, obj2Name = event.object1.name, event.object2.name
+      print("collision", obj1Name, obj2Name)
+      if obj1Name == "solid" and obj2Name == "chad" then
         print("collision, end jump")
         chad.actionEndJump()
       end
