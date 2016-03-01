@@ -22,6 +22,14 @@ function BlueSky.new()
     return self.body;
   end
 
+  self.moveX = function(x)
+    self.body.x = self.body.x + x
+  end
+
+  self.getX = function(x)
+    return self.body.x
+  end
+
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil

@@ -31,6 +31,15 @@ function PlainGrass.new(x, y, width, height)
     return self.solidArea.getBody();
   end
 
+  self.moveX = function(x)
+    self.body.x = self.body.x + x
+    self.solidArea.moveX(x)
+  end
+
+  self.getX = function()
+    return self.body.x
+  end
+
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil

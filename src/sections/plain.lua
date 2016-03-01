@@ -39,14 +39,14 @@ function Plain.build(sceneGroup)
 
   self.moveX = function(x)
     for i=1, #self.items do
-      local body = self.items[i].getBody()
-      body.x = body.x + x
+      self.items[i].moveX(x)
     end
   end
 
   self.getX = function()
-    return self.items[1].getBody().x
+    return self.items[1].getX()
   end
+
   return self
 end
 
