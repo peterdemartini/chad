@@ -10,29 +10,30 @@ function PlainGrass.new(x, y, width, height)
   self.width = width
   self.height = height
 
-  self.group = display.newGroup()
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}
+  -- self.body.fill =  { 0.4, 0.4, 0.9 }
+  -- self.body.isVisible = true
   self.body.anchorX = 0
   self.body.anchorY = 1
   self.body.x, self.body.y = x, y
 
   self.body.name = "ground"
-  self.group:insert(self.body)
 
-  self.solidArea = SolidArea.new(x, y - height + 3, width, 10)
-  self.group:insert(self.solidArea.getBody())
+  self.solidArea = SolidArea.new(x, y - height + 10, width, height - 10)
 
   self.getBody = function()
-    return self.group;
+    return self.body;
+  end
+
+  self.getSolidBody = function()
+    return self.solidArea.getBody();
   end
 
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil
-    self.group:remove()
-    self.group = nil
     self.body = nil
     self.solidArea.destroy()
     self.solidArea = nil

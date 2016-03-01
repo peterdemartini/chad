@@ -7,9 +7,8 @@ function SolidArea.new(x, y, width, height)
   local self = {};
   self.width = width
   self.height = height
-
-  self.body = display.newRect(x, y, self.width, self.height)
-  self.body.fill =  { 1, 0, 0.5 }
+  self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
+  -- self.body.fill =  { 1, 0.5, 0.3 }
   self.body.isVisible = false
   self.body.anchorX = 0
   self.body.anchorY = 0
@@ -22,7 +21,7 @@ function SolidArea.new(x, y, width, height)
   end
 
   function getBodyOptions()
-    return {friction=1.0, density=1.0, bounce=0};
+    return {friction=1.0, density=2.0, bounce=0};
   end
 
   function getBodyType()

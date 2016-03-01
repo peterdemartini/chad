@@ -32,7 +32,8 @@ function Wall.new(position)
 
   local properties = getProperties()
   self.body = display.newRect(properties.x, properties.y, properties.width, properties.height)
-  self.body.isVisible = false
+  -- self.body.fill =  { 0.3, 1, 0.5 }
+  -- self.body.isVisible = true
   self.body.anchorX = properties.anchorX
   self.body.anchorY = properties.anchorY
   self.body.x, self.body.y = properties.x, properties.y

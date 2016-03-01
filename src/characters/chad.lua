@@ -50,7 +50,7 @@ function ChadCharacter.new(x, y)
 			xForce = -400
 		end
 		transition.cancel(self.movingTransition)
-    self.body:applyForce(xForce, -1500, self.body.x, self.body.y)
+    self.body:applyForce(xForce, -1800, self.body.x, self.body.y)
   end
 
 	self.actionEndJump = function()

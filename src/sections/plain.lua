@@ -12,7 +12,7 @@ math.randomseed(os.time())
 function generateChunk()
   local width, height = math.random(100, screenW), math.random(20, screenH / 3)
   local x, y = math.random(10, screenW / 2), (screenH - 85)
-  return PlainGrass.new(x,y,width,height)
+  return PlainGrass.new(x,y+10,width,height)
 end
 
 function Plain.build(sceneGroup)
@@ -24,10 +24,9 @@ function Plain.build(sceneGroup)
   plainGrass = PlainGrass.new(0, screenH, screenW, 85)
   group:insert(plainGrass.getBody())
 
-  for i=1, 1,math.random(1) do
-    -- chunks[i] = generateChunk()
-    -- group:insert(chunks[i].getBody())
-  end
+  chunks[1] = generateChunk()
+  group:insert(chunks[1].getBody())
+  group:insert(chunks[1].getSolidBody())
 
   sceneGroup:insert(group)
 
