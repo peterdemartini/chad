@@ -18,6 +18,8 @@ local frames = {}
 local currentFrame = 1
 local fixedStatics = {}
 
+physics.setDrawMode("hybrid") 
+
 local function onRestartEvent()
 	composer.removeScene("src.reloading")
 	composer.gotoScene("src.reloading", "fade", 10)

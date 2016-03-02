@@ -24,7 +24,6 @@ function Plain.build(sceneGroup)
 
   self.items[3] = generateChunk()
   sceneGroup:insert(self.items[3].getBody())
-  sceneGroup:insert(self.items[3].getSolidBody())
 
   self.destroy = function()
     for i=1, #self.items do

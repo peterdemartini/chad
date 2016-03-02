@@ -7,10 +7,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 function PlainGrass.new(x, y, width, height)
   local physics = require 'physics'
   local self = {};
-  self.width = width
-  self.height = height
-
-  self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
+  self.body = display.newRect(display.contentCenterX, display.contentCenterY, width, height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}
   -- self.body.fill =  { 0.4, 0.4, 0.9 }
