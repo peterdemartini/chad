@@ -17,6 +17,7 @@ function ChadCharacter.new(x, y)
   self.body.anchorY = 0
   self.body.x = x
   self.body.y = y - self.height
+	self.running = false
 
 	self.body.name = 'chad'
 
@@ -56,6 +57,16 @@ function ChadCharacter.new(x, y)
 		self.jumping = false
 	end
 
+	self.actionRun = function()
+		print("start running")
+		self.running = true
+	end
+
+	self.actionEndRun = function()
+		print("end running")
+		self.running = false
+	end
+
   function addBody()
     physics.addBody(self.getBody(), getBodyType(), getBodyOptions())
     self.body.isFixedRotation = true
@@ -64,11 +75,14 @@ function ChadCharacter.new(x, y)
 
 	addBody()
 
-	self.moveX = function(xForce)
+	self.moveX = function(x)
 		if self.jumping then
 			return
 		end
-		self.body:applyForce(xForce, 0, self.body.x, self.body.y)
+		if self.running then
+			x = x * -3
+		end
+		self.body.x = self.body.x + x
 	end
 
 	self.destroy = function()

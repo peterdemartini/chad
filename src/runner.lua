@@ -12,13 +12,13 @@ local Wall    = require 'src.statics.wall'
 
 local layoutItems = require 'src.levels.one.layout'
 
-local screenH = display.contentHeight
+local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
 local frames = {}
 local currentFrame = 1
 local fixedStatics = {}
 
-physics.setDrawMode("hybrid") 
+-- physics.setDrawMode("hybrid")
 
 local function onRestartEvent()
 	composer.removeScene("src.reloading")
@@ -56,7 +56,7 @@ function scene:create(event)
 
 	scene:setFixedStatics()
 
-	chad = Chad.new(0, screenH - 75)
+	chad = Chad.new(screenW / 5, screenH - 75)
 	sceneGroup:insert(chad.getBody())
 
 	restartButton = widget.newButton{
@@ -93,7 +93,7 @@ function scene:enterFrame(event)
 		end
 	end
 	scene:updateFixedStatics(moveSize)
-	chad.moveX(moveSize)
+	chad.moveX(moveX)
 	chad.getBody():toFront()
 end
 
