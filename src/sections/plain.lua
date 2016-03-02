@@ -8,7 +8,7 @@ math.randomseed(os.time())
 
 function generateChunk()
   local width, height = math.random(100, screenW / 2), math.random(50, screenH / 4)
-  local startX = (screenW / 2)
+  local startX = ((screenW + width) / 2)
   local x = math.random(startX - width, screenW - width), (screenH - 85)
   local y = screenH - 85
   return PlainGrass.new(x,y+10,width,height)

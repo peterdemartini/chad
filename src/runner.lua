@@ -93,7 +93,8 @@ function scene:enterFrame(event)
 	end
 	if frames[nextFrame] ~= nil then
 		frames[nextFrame].moveX(moveX)
-		if frames[nextFrame].getX() == 0 then
+
+		if frames[nextFrame].getX() <= 0 then
 			frames[currentFrame].destroy()
 			currentFrame = nextFrame
 		end
