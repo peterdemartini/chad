@@ -60,6 +60,7 @@ function Wall.new(position)
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil
+    self.body:removeSelf()
     self.body = nil
   end
 

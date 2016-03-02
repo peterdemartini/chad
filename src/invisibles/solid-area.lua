@@ -40,7 +40,9 @@ function SolidArea.new(x, y, width, height)
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil
+    self.body.touchJoint:removeSelf()
     self.body.touchJoint = nil
+    self.body:removeSelf()
     self.body = nil
   end
 
