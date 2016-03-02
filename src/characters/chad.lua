@@ -10,7 +10,6 @@ function ChadCharacter.new(x, y)
 	self.jumping = false
   self.width = 76
   self.height = 76
-	self.moveForward = true
   self.body = display.newImage("images/chad/chad-still-76.png")
 
 	-- self.body.fill = { 1, 0, 0.5 }
@@ -45,12 +44,11 @@ function ChadCharacter.new(x, y)
 		self.jumping = true
 		local facingForward = true
 		if facingForward then
-			xForce = 400
+			xForce = 300
 		else
-			xForce = -400
+			xForce = -300
 		end
-		transition.cancel(self.movingTransition)
-    self.body:applyForce(xForce, -1800, self.body.x, self.body.y)
+    self.body:applyForce(xForce, -2000, self.body.x, self.body.y)
   end
 
 	self.actionEndJump = function()
@@ -66,35 +64,17 @@ function ChadCharacter.new(x, y)
 
 	addBody()
 
-	function updateMoveForward()
-		xPos = self.body.x + self.width
-		if xPos >= tooFarX then
-			self.moveForward = false
-		end
-		if xPos <= tooCloseX then
-			self.moveForward = true
-		end
-	end
-
-	function animateBackground()
+	self.moveX = function(xForce)
 		if self.jumping then
 			return
 		end
-		moveX = 30
-		if self.moveForward == false then
-			moveX = (moveX * 2) * -1
-		end
-		updateMoveForward()
-		self.movingTransition = transition.to(self.body, {time=1000, x=moveX, delta=true})
+		self.body:applyForce(xForce, 0, self.body.x, self.body.y)
 	end
-	local animateTimer = timer.performWithDelay(1000, animateBackground, 0)
-	animateBackground()
 
 	self.destroy = function()
 		package.loaded[physics] = nil
 		physics = nil
 		self.body = nil
-		timer.cancel(animateTimer)
 	end
 
 	return self;

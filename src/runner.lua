@@ -91,6 +91,7 @@ function scene:enterFrame(event)
 		end
 	end
 	scene:updateFixedStatics(moveSize)
+	chad.moveX(moveSize)
 	chad.getBody():toFront()
 end
 
