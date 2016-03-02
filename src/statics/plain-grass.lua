@@ -8,7 +8,7 @@ function PlainGrass.new(x, y, width, height)
   local physics = require 'physics'
   local self = {};
   print('plain grass', x,y,width,height)
-  self.body = display.newRect(display.contentCenterX, display.contentCenterY, width, height)
+  self.body = display.newRect((x + (width  / 2)), (y + (height  / 2)), width, height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}
   -- self.body.fill =  { 0.4, 0.4, 0.9 }
