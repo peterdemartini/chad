@@ -35,20 +35,15 @@ function SolidArea.new(x, y, width, height)
 
   addBody()
 
-  self.body.touchJoint = physics.newJoint("touch", self.getBody(), x, y)
-
   self.destroy = function()
     package.loaded[physics] = nil
     physics = nil
-    self.body.touchJoint:removeSelf()
-    self.body.touchJoint = nil
     self.body:removeSelf()
     self.body = nil
   end
 
   self.moveX = function(x)
     self.body.x = self.body.x + x
-    self.body.touchJoint:setTarget(self.body.x + x, self.body.y)
   end
 
   return self;
