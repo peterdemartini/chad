@@ -3,15 +3,17 @@ local Actions = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
-function Actions.new(chad)
+function Actions.new(chad, chadDied)
   local self = {};
 
   self.onCollision = function(event)
-    if event.phase == "began" then
-      local obj1Name, obj2Name = event.object1.name, event.object2.name
-      print("collision", obj1Name, obj2Name)
-      if obj1Name == 'solid' and obj2Name == 'chad' then
+    local obj1Name, obj2Name = event.object1.name, event.object2.name
+    if obj2Name == 'chad' then
+      if obj1Name == 'solid' and event.phase == 'began' then
         chad.actionEndJump()
+      end
+      if obj1Name == 'death-wall' and event.phase == 'began' then
+        timer.performWithDelay(100, chadDied)
       end
     end
   end
@@ -20,7 +22,6 @@ function Actions.new(chad)
   local movementTimer = nil
 
   local shouldJump = function()
-    print("should, jump", holding)
     movementTimer = nil
     if not holding then
       chad.actionJump()
@@ -31,11 +32,9 @@ function Actions.new(chad)
 
   self.onScreenTouch = function(event)
     if event.phase == "began" then
-      print("should, move?")
       holding = true
       movementTimer = timer.performWithDelay(200, shouldJump)
     elseif event.phase == "ended" or event.phase == "cancelled" then
-      print("ended move")
       holding = false
       chad.actionEndRun()
       if movementTimer then

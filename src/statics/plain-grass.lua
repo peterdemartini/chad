@@ -7,7 +7,6 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 function PlainGrass.new(x, y, width, height)
   local physics = require 'physics'
   local self = {};
-  print('plain grass', x,y,width,height)
   self.body = display.newRect((x + (width  / 2)), (y + (height  / 2)), width, height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}

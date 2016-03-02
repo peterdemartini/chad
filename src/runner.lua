@@ -8,7 +8,7 @@ physics.start(); physics.pause()
 
 local Chad    = require 'src.characters.chad'
 local Actions = require 'src.invisibles.actions'
-local Wall    = require 'src.statics.wall'
+local Wall    = require 'src.invisibles.wall'
 
 local layoutItems = require 'src.levels.one.layout'
 
@@ -21,8 +21,14 @@ local fixedStatics = {}
 -- physics.setDrawMode("hybrid")
 
 local function onRestartEvent()
-	composer.removeScene("src.reloading")
+	composer.removeScene("src.runner")
 	composer.gotoScene("src.reloading", "fade", 10)
+	return true
+end
+
+local function chadDied()
+	composer.removeScene("src.runner")
+	composer.gotoScene("src.dead", "fade", 100)
 	return true
 end
 
@@ -67,7 +73,7 @@ function scene:create(event)
 	restartButton.x = display.contentWidth - 50
 	restartButton.y = 50
 
-	actions = Actions.new(chad)
+	actions = Actions.new(chad, chadDied)
 end
 
 function scene:enterFrame(event)
