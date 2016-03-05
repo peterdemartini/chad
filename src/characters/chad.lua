@@ -1,6 +1,4 @@
 local ChadCharacter = {}
-local tooFarX = display.contentWidth - (display.contentWidth / 4)
-local tooCloseX = (display.contentWidth / 3)
 
 function ChadCharacter.new(x, y)
 	local self = {};
@@ -8,15 +6,14 @@ function ChadCharacter.new(x, y)
 	local physics = require "physics"
 
 	self.jumping = false
-  self.width = 76
-  self.height = 76
+  local width, height = 76, 76
   self.body = display.newImage("images/chad/chad-still-76.png")
 
 	-- self.body.fill = { 1, 0, 0.5 }
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x = x
-  self.body.y = y - self.height
+  self.body.y = y - height
 	self.running = false
 
 	self.body.name = 'chad'
@@ -26,6 +23,15 @@ function ChadCharacter.new(x, y)
   end
 
   function getBodyOptions()
+		local shape={
+			width*-0.5, height*-0.15,
+			0, height*-0.2,
+			width*0.3, height*-0.5,
+			width*0.5, height*-0.4,
+			width*0.5, 0,
+			width*0.3, height*0.5,
+			0, height*0.50
+		}
     return {friction=0.5, density=1.0, bounce=0.1, radius=35};
   end
 
