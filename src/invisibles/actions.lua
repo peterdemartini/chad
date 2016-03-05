@@ -1,4 +1,5 @@
 
+local debug = require('src.debug')('actions')
 local Actions = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
@@ -10,9 +11,11 @@ function Actions.new(chad, chadDied)
     local obj1Name, obj2Name = event.object1.name, event.object2.name
     if obj2Name == 'chad' then
       if obj1Name == 'solid' and event.phase == 'began' then
+        debug('solid collided with chad')
         chad.actionEndJump()
       end
       if obj1Name == 'death-wall' and event.phase == 'began' then
+        debug('death-wall collided with chad')
         timer.performWithDelay(100, chadDied)
       end
     end
@@ -23,6 +26,7 @@ function Actions.new(chad, chadDied)
 
   local shouldJump = function()
     movementTimer = nil
+    debug('shouldJump', holding)
     if not holding then
       chad.actionJump()
       return
@@ -33,9 +37,11 @@ function Actions.new(chad, chadDied)
   self.onScreenTouch = function(event)
     if event.phase == "began" then
       holding = true
+      debug('touch began')
       movementTimer = timer.performWithDelay(200, shouldJump)
     elseif event.phase == "ended" or event.phase == "cancelled" then
       holding = false
+      debug('touch ended')
       chad.actionEndRun()
       if movementTimer then
         chad.actionJump()
@@ -47,6 +53,7 @@ function Actions.new(chad, chadDied)
   end
 
   self.destroy = function()
+    debug('destroying')
     Runtime:removeEventListener("collision", self.onCollision)
     Runtime:removeEventListener("touch", self.onScreenTouch)
     if movementTimer then

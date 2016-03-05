@@ -1,10 +1,11 @@
+local debug   = require('src.debug')('blue-sky')
 local BlueSky = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
 function BlueSky.new()
+  debug('creating...')
   local physics = require "physics"
-
   local self = {};
   self.width = screenW
   self.height = 500
@@ -31,6 +32,7 @@ function BlueSky.new()
   end
 
   self.destroy = function()
+    debug('destory')
     package.loaded[physics] = nil
     physics = nil
     self.body:removeSelf()

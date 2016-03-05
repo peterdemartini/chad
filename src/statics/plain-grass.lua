@@ -1,3 +1,4 @@
+local debug     = require('src.debug')('plain-grass')
 local SolidArea = require 'src.invisibles.solid-area'
 
 local PlainGrass = {}
@@ -5,13 +6,12 @@ local PlainGrass = {}
 local screenW, screenH = display.contentWidth, display.contentHeight
 
 function PlainGrass.new(x, y, width, height)
+  debug('creating...', x, y, width, height)
   local physics = require 'physics'
   local self = {};
   self.body = display.newRect((x + (width  / 2)), (y + (height  / 2)), width, height)
 
   self.body.fill = {type="image", filename='images/level-1-ground.png'}
-  -- self.body.fill =  { 0.4, 0.4, 0.9 }
-  -- self.body.isVisible = true
   self.body.anchorX = 0
   self.body.anchorY = 1
   self.body.x, self.body.y = x, y
@@ -38,6 +38,7 @@ function PlainGrass.new(x, y, width, height)
   end
 
   self.destroy = function()
+    debug('destorying')
     package.loaded[physics] = nil
     physics = nil
     self.body:removeSelf()

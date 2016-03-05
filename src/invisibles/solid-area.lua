@@ -1,11 +1,12 @@
+local debug = require('src.debug')('solid-area')
 local SolidArea = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
 function SolidArea.new(x, y, width, height)
+  debug('solid area', x, y, width, height)
   local physics = require 'physics'
   local self = {};
-  print('solid area', x,y,width,height)
   self.body = display.newRect((x + (width  / 2)), (y + (height  / 2)), width, height)
 
   self.body.fill =  { 1, 0.5, 0.3 }
@@ -35,6 +36,7 @@ function SolidArea.new(x, y, width, height)
   addBody()
 
   self.destroy = function()
+    debug('destroying')
     package.loaded[physics] = nil
     physics = nil
     self.body:removeSelf()

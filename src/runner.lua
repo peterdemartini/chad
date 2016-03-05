@@ -1,16 +1,13 @@
+local config   = require 'src.config'
 local composer = require 'composer'
-local scene = composer.newScene()
+local widget   = require 'widget'
+local physics  = require 'physics'
 
-local widget = require "widget"
-
-local physics = require 'physics'
-physics.start(); physics.pause()
-
-local Chad    = require 'src.characters.chad'
-local Actions = require 'src.invisibles.actions'
-local Wall    = require 'src.invisibles.wall'
-
-local layoutItems = require 'src.levels.one.layout'
+local Chad        = require 'src.characters.chad'
+local Actions     = require 'src.invisibles.actions'
+local Wall        = require 'src.invisibles.wall'
+local layoutItems = require 'src.layouts.default'
+local debug       = require('src.debug')('runner')
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
@@ -18,21 +15,30 @@ local frames = {}
 local currentFrame = 1
 local fixedStatics = {}
 
--- physics.setDrawMode("hybrid")
+local scene   = composer.newScene()
+physics.start(); physics.pause()
+
+if config.debug then
+	debug('Setting Draw Mode to Hybrid')
+	physics.setDrawMode("hybrid")
+end
 
 local function onRestartEvent()
+	debug('onRestartEvent()')
 	composer.removeScene("src.runner")
 	composer.gotoScene("src.reloading", "fade", 10)
 	return true
 end
 
 local function chadDied()
+	debug('chadDied()')
 	composer.removeScene("src.runner")
 	composer.gotoScene("src.dead", "fade", 100)
 	return true
 end
 
 function scene:buildFrame(i)
+	debug('buildFrame', i)
 	local sceneGroup = self.view
 	frames[i] = layoutItems[i].build(sceneGroup)
 end
@@ -56,6 +62,7 @@ function scene:updateFixedStatics(currentX)
 end
 
 function scene:create(event)
+	debug('Creating scene')
 	local sceneGroup = self.view
 
 	scene:buildFrame(currentFrame)
@@ -108,6 +115,7 @@ function scene:show( event )
 	local sceneGroup = self.view
 
 	if event.phase == "did" then
+		debug('Scene did show')
 		physics.start()
 	end
 end
@@ -116,12 +124,14 @@ function scene:hide( event )
 	local sceneGroup = self.view
 
 	if event.phase == "will" then
+		debug('Scene will hide')
 		physics.stop()
 	end
 end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
+	debug('Scene is being destroyed')
 
 	for i = 1, #frames do
 		local frame = frames[i]

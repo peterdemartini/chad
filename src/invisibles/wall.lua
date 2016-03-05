@@ -1,8 +1,10 @@
+local debug = require('src.debug')('wall')
 local Wall = {}
 
 local screenW, screenH = display.actualContentWidth, display.actualContentHeight
 
 function Wall.new(position)
+  debug('creating wall', position)
   local physics = require 'physics'
   local self = {};
 
@@ -18,7 +20,6 @@ function Wall.new(position)
     width = edgeWidth
     height = screenH
     willKillChad = true
-    print("position", position)
   end
   if position == 'right' then
     width = edgeWidth
@@ -58,6 +59,7 @@ function Wall.new(position)
   addBody()
 
   self.destroy = function()
+    debug('destroying...')
     package.loaded[physics] = nil
     physics = nil
     self.body:removeSelf()

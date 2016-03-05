@@ -1,6 +1,8 @@
+local debug = require('src.debug')('chad')
 local ChadCharacter = {}
 
 function ChadCharacter.new(x, y)
+	debug('creating', x, y)
 	local self = {};
 
 	local physics = require "physics"
@@ -8,12 +10,9 @@ function ChadCharacter.new(x, y)
 	self.jumping = false
   local width, height = 76, 76
   self.body = display.newImage("images/chad/chad-still-76.png")
-
-	-- self.body.fill = { 1, 0, 0.5 }
   self.body.anchorX = 0
   self.body.anchorY = 0
-  self.body.x = x
-  self.body.y = y - height
+  self.body.x, self.body.y = x, y - height
 	self.running = false
 
 	self.body.name = 'chad'
@@ -40,11 +39,11 @@ function ChadCharacter.new(x, y)
   end
 
   self.actionFire = function()
-		print("firing")
+		debug("firing")
   end
 
 	self.actionJump = function()
-		print("jumping")
+		debug("jumping")
 		if self.jumping then
 			return
 		end
@@ -59,17 +58,17 @@ function ChadCharacter.new(x, y)
   end
 
 	self.actionEndJump = function()
-		print("end jumping")
+		debug("end jumping")
 		self.jumping = false
 	end
 
 	self.actionRun = function()
-		print("start running")
+		debug("start running")
 		self.running = true
 	end
 
 	self.actionEndRun = function()
-		print("end running")
+		debug("end running")
 		self.running = false
 	end
 
@@ -92,6 +91,7 @@ function ChadCharacter.new(x, y)
 	end
 
 	self.destroy = function()
+		debug('destroying')
 		package.loaded[physics] = nil
 		physics = nil
 		self.body = nil
