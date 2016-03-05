@@ -80,7 +80,7 @@ function scene:enterFrame(event)
 	if currentFrame == nil or frames[currentFrame] == nil then
 		return
 	end
-	local moveSize = 2
+	local moveSize = 3
 	local moveX = -1 * moveSize
 	frames[currentFrame].moveX(moveX)
 	local nextFrame = currentFrame + 1
@@ -89,7 +89,7 @@ function scene:enterFrame(event)
 	end
 	if frames[nextFrame] == nil and layoutItems[nextFrame] ~= nil then
 		scene:buildFrame(nextFrame)
-		frames[nextFrame].moveX(display.contentWidth)
+		frames[nextFrame].moveX(display.contentWidth - 1)
 	end
 	if frames[nextFrame] ~= nil then
 		frames[nextFrame].moveX(moveX)
