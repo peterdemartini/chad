@@ -6,14 +6,14 @@ local physics  = require 'physics'
 local Chad        = require 'src.characters.chad'
 local Actions     = require 'src.invisibles.actions'
 local Wall        = require 'src.invisibles.wall'
-local layoutItems = require 'src.layouts.default'
+local FrameMaster = require 'src.frame-master'
 local debug       = require('src.debug')('runner')
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
-local frames = {}
-local currentFrame = 1
+
 local fixedStatics = {}
+local frameMaster
 
 local scene   = composer.newScene()
 physics.start(); physics.pause()
@@ -35,12 +35,6 @@ local function chadDied()
 	composer.removeScene("src.runner")
 	composer.gotoScene("src.dead", "fade", 100)
 	return true
-end
-
-function scene:buildFrame(i)
-	debug('buildFrame', i)
-	local sceneGroup = self.view
-	frames[i] = layoutItems[i].build(sceneGroup)
 end
 
 function scene:setFixedStatics()
@@ -65,12 +59,12 @@ function scene:create(event)
 	debug('Creating scene')
 	local sceneGroup = self.view
 
-	scene:buildFrame(currentFrame)
-
 	scene:setFixedStatics()
 
 	chad = Chad.new(screenW / 5, screenH - 75)
 	sceneGroup:insert(chad.getBody())
+
+	frameMaster = FrameMaster.new(chad, sceneGroup)
 
 	restartButton = widget.newButton{
 		width=50, height=50,
@@ -81,34 +75,7 @@ function scene:create(event)
 	restartButton.y = 50
 
 	actions = Actions.new(chad, chadDied)
-end
 
-function scene:enterFrame(event)
-	if currentFrame == nil or frames[currentFrame] == nil then
-		return
-	end
-	local moveSize = 3
-	local moveX = -1 * moveSize
-	frames[currentFrame].moveX(moveX)
-	local nextFrame = currentFrame + 1
-	if layoutItems[nextFrame] == nil then
-		currentFrame = nil
-	end
-	if frames[nextFrame] == nil and layoutItems[nextFrame] ~= nil then
-		scene:buildFrame(nextFrame)
-		frames[nextFrame].moveX(display.contentWidth - 1)
-	end
-	if frames[nextFrame] ~= nil then
-		frames[nextFrame].moveX(moveX)
-
-		if frames[nextFrame].getX() <= 0 then
-			frames[currentFrame].destroy()
-			currentFrame = nextFrame
-		end
-	end
-	scene:updateFixedStatics(moveSize)
-	chad.moveX(moveX)
-	chad.getBody():toFront()
 end
 
 function scene:show( event )
@@ -133,19 +100,14 @@ function scene:destroy( event )
 	local sceneGroup = self.view
 	debug('Scene is being destroyed')
 
-	for i = 1, #frames do
-		local frame = frames[i]
-		frame.destroy(sceneGroup)
-		frame[i] = nil
-	end
-
 	for i = 1, #fixedStatics do
 		local static = fixedStatics[i]
 		static.destroy()
 		fixedStatics[i] = nil
 	end
 
-	Runtime:removeEventListener("enterFrame", scene)
+	frameMaster.destroy()
+	frameMaster = nil
 
 	actions.destroy()
 	chad.destroy()
@@ -154,18 +116,16 @@ function scene:destroy( event )
 	package.loaded[physics] = nil
 	package.loaded[Chad] = nil
 	package.loaded[Actions] = nil
-	package.loaded[layoutItems] = nil
+	package.loaded[FrameMaster] = nil
 	physics = nil
 	Chad = nil
+	FrameMaster = nil
 	Actions = nil
-	layoutItems = nil
 end
 
 scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 scene:addEventListener("destroy", scene)
-
-Runtime:addEventListener("enterFrame", scene)
 
 return scene

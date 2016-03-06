@@ -1,19 +1,20 @@
-local debug = require('src.debug')('solid-area')
+local debug  = require('src.debug')('solid-area')
+local config = require 'src.config'
 local SolidArea = {}
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 
-function SolidArea.new(x, y, width, height)
-  debug('solid area', x, y, width, height)
+function SolidArea.new(startX, startY, width, height)
+  debug('solid area', startX, startY, width, height)
   local physics = require 'physics'
   local self = {};
-  self.body = display.newRect((x + (width  / 2)), (y + (height  / 2)), width, height)
+  self.body = display.newRect((startX + (width  / 2)), (startY + (height  / 2)), width, height)
 
   self.body.fill =  { 1, 0.5, 0.3 }
   self.body.isVisible = false
   self.body.anchorX = 0
   self.body.anchorY = 0
-  self.body.x, self.body.y = x, y
+  self.body.x, self.body.y = startX, startY
 
   self.body.name = "solid"
 
@@ -39,12 +40,13 @@ function SolidArea.new(x, y, width, height)
     debug('destroying')
     package.loaded[physics] = nil
     physics = nil
+    transition.cancel(self.body)
     self.body:removeSelf()
     self.body = nil
   end
 
   self.moveX = function(x)
-    self.body.x = self.body.x + x
+    transition.to(self.getBody(), {x=self.body.x+x, time=config.scrollTransitionTime})
   end
 
   return self;

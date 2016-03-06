@@ -1,4 +1,6 @@
-local debug = require('src.debug')('chad')
+local debug  = require('src.debug')('chad')
+local config = require('src.config')
+
 local ChadCharacter = {}
 
 function ChadCharacter.new(x, y)
@@ -47,6 +49,7 @@ function ChadCharacter.new(x, y)
 		if self.jumping then
 			return
 		end
+		transition.cancel(self.getBody())
 		self.jumping = true
 		local facingForward = true
 		if facingForward then
@@ -87,13 +90,15 @@ function ChadCharacter.new(x, y)
 		if self.running then
 			x = x * -3
 		end
-		self.body.x = self.body.x + x
+		transition.to(self.getBody(), {x=x, delta=true, time=config.scrollTransitionTime})
+		self.body:toFront()
 	end
 
 	self.destroy = function()
 		debug('destroying')
 		package.loaded[physics] = nil
 		physics = nil
+    transition.cancel(self.body)
 		self.body = nil
 	end
 
