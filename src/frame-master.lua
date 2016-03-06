@@ -4,7 +4,7 @@ local layoutItems = require 'src.layouts.default'
 
 local FrameMaster = {}
 
-local screenW = display.contentWidth
+local screenW = config.screenW
 
 function FrameMaster.new(chad, sceneGroup)
   local self = {}
@@ -19,7 +19,7 @@ function FrameMaster.new(chad, sceneGroup)
       return
     end
   	debug('buildFrame', frame)
-  	frames[frame] = layoutItems[frame].build(sceneGroup, startX)
+  	frames[frame] = layoutItems[frame].build(sceneGroup, startX - 1)
   end
 
   local function deleteFrame(frame)
@@ -50,20 +50,21 @@ function FrameMaster.new(chad, sceneGroup)
       debug('deleteCurrentFrame')
       deleteFrame(currentFrame)
       currentFrame = currentFrame + 1
-      local nextStartX = getRemainderOfFrame() 
+      local nextStartX = getRemainderOfFrame() + config.scrollMovementX
       local nextFrame = currentFrame + 1
       buildFrame(nextFrame, nextStartX)
+      moveFrame(currentFrame)
     end
   end
 
   local function enterTimer()
     debug('enter timer for frame')
-    currentPosition = currentPosition + config.scrollMovementX
 
     moveFrame(currentFrame)
     moveFrame(currentFrame + 1)
     maybeDeleteOrCreateFrame()
 
+    currentPosition = currentPosition + config.scrollMovementX
     chad.moveX(config.scrollMovementX)
   end
 

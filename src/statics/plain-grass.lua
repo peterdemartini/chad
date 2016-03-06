@@ -4,7 +4,7 @@ local config    = require 'src.config'
 
 local PlainGrass = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
+local screenW, screenH = config.screenW, config.screenH
 
 function PlainGrass.new(startX, startY, width, height)
   debug('creating...', startX, startY, width, height)

@@ -2,7 +2,7 @@ local debug  = require('src.debug')('solid-area')
 local config = require 'src.config'
 local SolidArea = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
+local screenW, screenH = config.screenW, config.screenH
 
 function SolidArea.new(startX, startY, width, height)
   debug('solid area', startX, startY, width, height)

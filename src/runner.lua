@@ -78,7 +78,13 @@ function scene:create(event)
 
 end
 
-function scene:show( event )
+function scene:enterFrame(event)
+	if chad ~= nil then
+		chad.toFront()
+	end
+end
+
+function scene:show(event)
 	local sceneGroup = self.view
 
 	if event.phase == "did" then
@@ -87,7 +93,7 @@ function scene:show( event )
 	end
 end
 
-function scene:hide( event )
+function scene:hide(event)
 	local sceneGroup = self.view
 
 	if event.phase == "will" then
@@ -96,7 +102,7 @@ function scene:hide( event )
 	end
 end
 
-function scene:destroy( event )
+function scene:destroy(event)
 	local sceneGroup = self.view
 	debug('Scene is being destroyed')
 
@@ -127,5 +133,7 @@ scene:addEventListener("create", scene)
 scene:addEventListener("show", scene)
 scene:addEventListener("hide", scene)
 scene:addEventListener("destroy", scene)
+
+Runtime:addEventListener('enterFrame', scene)
 
 return scene

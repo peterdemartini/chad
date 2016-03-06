@@ -2,7 +2,7 @@ local debug   = require('src.debug')('blue-sky')
 local config  = require 'src.config'
 local BlueSky = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
+local screenW, screenH = config.screenW, config.screenH
 
 function BlueSky.new(startX)
   debug('creating...')

@@ -5,7 +5,7 @@ local config      = require 'src.config'
 
 local Plain = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
+local screenW, screenH = config.screenW, config.screenH
 math.randomseed(os.time())
 
 function generateChunk(startX)

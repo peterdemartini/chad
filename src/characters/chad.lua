@@ -91,6 +91,12 @@ function ChadCharacter.new(x, y)
 			x = x * -3
 		end
 		transition.to(self.getBody(), {x=x, delta=true, time=config.scrollTransitionTime})
+	end
+
+	self.toFront = function()
+		if self.body == nil then
+			return
+		end
 		self.body:toFront()
 	end
 

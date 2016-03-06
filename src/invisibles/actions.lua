@@ -2,8 +2,6 @@
 local debug = require('src.debug')('actions')
 local Actions = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
-
 function Actions.new(chad, chadDied)
   local self = {};
 
