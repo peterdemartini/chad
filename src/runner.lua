@@ -13,7 +13,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
 
 local fixedStatics = {}
-local frameMaster
+local frameMaster, restartButton
 
 local scene   = composer.newScene()
 physics.start(); physics.pause()
@@ -107,26 +107,27 @@ function scene:destroy(event)
 	debug('Scene is being destroyed')
 
 	for i = 1, #fixedStatics do
-		local static = fixedStatics[i]
-		static.destroy()
+		fixedStatics[i].destroy()
 		fixedStatics[i] = nil
 	end
 
 	frameMaster.destroy()
-	frameMaster = nil
-
 	actions.destroy()
 	chad.destroy()
-	chad = nil
+	restartButton:removeSelf()
 
 	package.loaded[physics] = nil
 	package.loaded[Chad] = nil
 	package.loaded[Actions] = nil
 	package.loaded[FrameMaster] = nil
-	physics = nil
 	Chad = nil
 	FrameMaster = nil
 	Actions = nil
+	frameMaster = nil
+	actions = nil
+	chad = nil
+	physics = nil
+	restartButton = nil
 end
 
 scene:addEventListener("create", scene)

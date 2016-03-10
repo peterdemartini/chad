@@ -1,12 +1,11 @@
 local debug       = require('src.debug')('frame-master')
 local config      = require 'src.config'
-local layoutItems = require 'src.layouts.default'
 
 local FrameMaster = {}
-
 local screenW = config.screenW
 
 function FrameMaster.new(chad, sceneGroup)
+  local layoutItems = require 'src.layouts.default'
   local self = {}
   local moveTimer = nil
 
@@ -19,7 +18,7 @@ function FrameMaster.new(chad, sceneGroup)
       return
     end
   	debug('buildFrame', frame)
-  	frames[frame] = layoutItems[frame].build(sceneGroup, startX - 1)
+  	frames[frame] = layoutItems[frame].build(sceneGroup, startX)
   end
 
   local function deleteFrame(frame)
@@ -77,11 +76,14 @@ function FrameMaster.new(chad, sceneGroup)
     for i = 1, #frames do
       deleteFrame(i)
     end
+    package.loaded[layoutItems] = nil
+    layoutItems = nil
   end
 
   buildFrame(1, 0)
-  buildFrame(2, screenW)
+  buildFrame(2, screenW - 1)
   currentFrame = 1
+  currentPosition = -1
 
   moveTimer = timer.performWithDelay(config.scrollTransitionTime, enterTimer, -1)
 

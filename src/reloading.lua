@@ -5,6 +5,7 @@ local physics = require 'physics'
 physics.start(); physics.pause()
 
 local function restart()
+	composer.removeScene("src.reloading")
 	composer.removeScene("src.runner")
 	composer.gotoScene("src.runner", "fade", 20)
 	return true

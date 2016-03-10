@@ -6,6 +6,8 @@ local widget = require "widget"
 local playBtn
 
 local function onPlayBtnRelease()
+	composer.removeScene("src.reloading")
+	composer.removeScene("src.runner")
 	composer.gotoScene("src.runner", "fade", 500)
 	return true
 end
