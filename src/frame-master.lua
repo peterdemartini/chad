@@ -12,6 +12,7 @@ function FrameMaster.new(chad, sceneGroup)
   local frames = {}
   local currentFrame = 0
   local currentPosition = 0
+  local running = true
 
   function buildFrame(frame, startX)
     if layoutItems[frame] == nil then
@@ -58,13 +59,23 @@ function FrameMaster.new(chad, sceneGroup)
 
   local function enterTimer()
     debug('enter timer for frame')
-
+    if not running then
+      return
+    end
     moveFrame(currentFrame)
     moveFrame(currentFrame + 1)
     maybeDeleteOrCreateFrame()
 
     currentPosition = currentPosition + config.scrollMovementX
     chad.moveX(config.scrollMovementX)
+  end
+
+  self.pause = function()
+    running = false
+  end
+
+  self.play = function()
+    running = true
   end
 
   self.destroy = function()

@@ -5,7 +5,12 @@ local Actions = {}
 function Actions.new(chad, chadDied)
   local self = {};
 
+  local running = true
+
   self.onCollision = function(event)
+    if not running then
+      return
+    end
     local obj1Name, obj2Name = event.object1.name, event.object2.name
     if obj2Name == 'chad' then
       if obj1Name == 'solid' and event.phase == 'began' then
@@ -23,6 +28,9 @@ function Actions.new(chad, chadDied)
   local movementTimer = nil
 
   local shouldJump = function()
+    if not running then
+      return
+    end
     movementTimer = nil
     debug('shouldJump', holding)
     if not holding then
@@ -33,6 +41,9 @@ function Actions.new(chad, chadDied)
   end
 
   self.onScreenTouch = function(event)
+    if not running then
+      return
+    end
     if event.phase == "began" then
       holding = true
       debug('touch began')
@@ -48,6 +59,14 @@ function Actions.new(chad, chadDied)
       movementTimer = nil
     end
     return true
+  end
+
+  self.pause = function()
+    running = false
+  end
+
+  self.play = function()
+    running = true
   end
 
   self.destroy = function()

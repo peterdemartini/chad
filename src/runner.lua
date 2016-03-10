@@ -13,7 +13,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
 
 local fixedStatics = {}
-local frameMaster, restartButton
+local frameMaster, restartButton, playButton, pauseButton
 
 local scene   = composer.newScene()
 physics.start(); physics.pause()
@@ -27,6 +27,26 @@ local function onRestartEvent()
 	debug('onRestartEvent()')
 	composer.removeScene("src.runner")
 	composer.gotoScene("src.reloading", "fade", 10)
+	return true
+end
+
+local function onPauseEvent()
+	debug('onPauseEvent()')
+	frameMaster.pause()
+	actions.pause()
+	physics.stop()
+	playButton.isVisible = true
+	pauseButton.isVisible = false
+	return true
+end
+
+local function onPlayEvent()
+	debug('onPlayEvent()')
+	frameMaster.play()
+	actions.play()
+	physics.start()
+	playButton.isVisible = false
+	pauseButton.isVisible = true
 	return true
 end
 
@@ -67,12 +87,29 @@ function scene:create(event)
 	frameMaster = FrameMaster.new(chad, sceneGroup)
 
 	restartButton = widget.newButton{
-		width=50, height=50,
-		defaultFile = "images/restart-button.png",
+		width=60, height=60,
+		defaultFile = "images/buttons/button_repeat.png",
 		onRelease = onRestartEvent
 	}
 	restartButton.x = display.contentWidth - 50
 	restartButton.y = 50
+
+	pauseButton = widget.newButton{
+		width=60, height=60,
+		defaultFile = "images/buttons/button_pause.png",
+		onRelease = onPauseEvent
+	}
+	pauseButton.x = display.contentWidth - 110
+	pauseButton.y = 50
+
+	playButton = widget.newButton{
+		width=60, height=60,
+		defaultFile = "images/buttons/button_play.png",
+		onRelease = onPlayEvent
+	}
+	playButton.x = display.contentWidth - 110
+	playButton.y = 50
+	playButton.isVisible = false
 
 	actions = Actions.new(chad, chadDied)
 
@@ -115,6 +152,8 @@ function scene:destroy(event)
 	actions.destroy()
 	chad.destroy()
 	restartButton:removeSelf()
+	pauseButton:removeSelf()
+	playButton:removeSelf()
 
 	package.loaded[physics] = nil
 	package.loaded[Chad] = nil
@@ -128,6 +167,8 @@ function scene:destroy(event)
 	chad = nil
 	physics = nil
 	restartButton = nil
+	playButton = nil
+	pauseButton = nil
 end
 
 scene:addEventListener("create", scene)
