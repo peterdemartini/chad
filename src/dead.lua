@@ -3,7 +3,7 @@ local scene = composer.newScene()
 
 local widget = require "widget"
 
-local playBtn
+local playBtn, background, title, description
 
 local function onPlayBtnRelease()
 	composer.removeScene("src.reloading")
@@ -15,15 +15,16 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
-	local background = display.newImageRect( "images/background.jpg", display.contentWidth, display.contentHeight )
+	background = display.newImageRect( "images/background.jpg", display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
 	background.x, background.y = 0, 0
 
-	local title = display.newText("Chad Died", 264, 42, "Arial", 60 )
+	title = display.newText("Chad Died", 264, 42, "Arial", 60 )
 	title.x = display.contentWidth * 0.5
 	title.y = 100
-  local description = display.newText("And you probably don't care", 264, 42, "Arial", 20 )
+
+  description = display.newText("And you probably don't care", 264, 42, "Arial", 20 )
   description.x = display.contentWidth * 0.5
   description.y = 200
 
@@ -50,6 +51,27 @@ function scene:destroy( event )
 		playBtn = nil
 	end
 
+	if title then
+		title:removeSelf()
+		title = nil
+	end
+
+	if description then
+		description:removeSelf()
+		description = nil
+	end
+
+	if background then
+		background:removeSelf()
+		background = nil
+	end
+
+	package.loaded[physics] = nil
+	package.loaded[widget] = nil
+	physics = nil
+	widget = nil
+
+	sceneGroup:removeSelf()
 end
 
 scene:addEventListener( "create", scene )

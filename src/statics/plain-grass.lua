@@ -41,6 +41,7 @@ function PlainGrass.new(startX, startY, width, height)
 
   self.cancel = function()
     transition.cancel(self.body)
+    self.solidArea.cancel()
   end
 
   self.destroy = function()

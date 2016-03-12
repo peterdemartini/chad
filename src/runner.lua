@@ -25,8 +25,13 @@ end
 
 local function onRestartEvent()
 	debug('onRestartEvent()')
-	composer.removeScene("src.runner")
-	composer.gotoScene("src.reloading", "fade", 10)
+	composer.gotoScene("src.reloading", "fade", 100)
+	return true
+end
+
+local function chadDied()
+	debug('chadDied()')
+	composer.gotoScene("src.dead", "fade", 100)
 	return true
 end
 
@@ -47,13 +52,6 @@ local function onPlayEvent()
 	physics.start()
 	playButton.isVisible = false
 	pauseButton.isVisible = true
-	return true
-end
-
-local function chadDied()
-	debug('chadDied()')
-	composer.removeScene("src.runner")
-	composer.gotoScene("src.dead", "fade", 100)
 	return true
 end
 
@@ -85,6 +83,7 @@ function scene:create(event)
 	sceneGroup:insert(chad.getBody())
 
 	frameMaster = FrameMaster.new(chad, sceneGroup)
+	frameMaster.build()
 
 	restartButton = widget.newButton{
 		width=60, height=60,
@@ -159,16 +158,17 @@ function scene:destroy(event)
 	package.loaded[Chad] = nil
 	package.loaded[Actions] = nil
 	package.loaded[FrameMaster] = nil
+	physics = nil
 	Chad = nil
 	FrameMaster = nil
 	Actions = nil
 	frameMaster = nil
 	actions = nil
 	chad = nil
-	physics = nil
 	restartButton = nil
 	playButton = nil
 	pauseButton = nil
+	sceneGroup:removeSelf()
 end
 
 scene:addEventListener("create", scene)

@@ -84,6 +84,9 @@ function FrameMaster.new(chad, sceneGroup)
   end
 
   self.pause = function()
+    for i = 1, #frames do
+      cancelFrame(i)
+    end
     running = false
   end
 
@@ -104,10 +107,14 @@ function FrameMaster.new(chad, sceneGroup)
     layoutItems = nil
   end
 
-  buildFrame(1, 0)
-  buildFrame(2, screenW - 1)
-  currentFrame = 1
-  currentPosition = -1
+
+  self.build = function()
+    debug('building frames')
+    buildFrame(1, 0)
+    buildFrame(2, screenW - 1)
+    currentFrame = 1
+    currentPosition = -1
+  end
 
   moveTimer = timer.performWithDelay(config.scrollDelay, enterTimer, -1)
 

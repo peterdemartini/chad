@@ -1,6 +1,6 @@
 return {
-  debugPhysics=false,
-  debug='runner',
+  debugPhysics=true,
+  debug='frame-master',
   groundHeight=85,
   scrollMovementX=-145,
   scrollTransitionTime=995,

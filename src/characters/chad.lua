@@ -108,9 +108,10 @@ function ChadCharacter.new(x, y)
 	self.destroy = function()
 		debug('destroying')
 		package.loaded[physics] = nil
-		physics = nil
+    physics = nil
     transition.cancel(self.body)
-		self.body = nil
+    self.body:removeSelf()
+    self.body = nil
 	end
 
 	return self;
