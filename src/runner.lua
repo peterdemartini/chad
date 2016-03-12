@@ -55,6 +55,12 @@ local function onRunEvent()
 	return true
 end
 
+local function onEndRunEvent()
+	chad.actionEndRun()
+	return true
+end
+
+
 local function onJumpEvent()
 	chad.actionJump()
 	return true
@@ -82,6 +88,9 @@ function scene:create(event)
 	debug('Creating scene')
 	local sceneGroup = self.view
 
+	composer.removeScene('src.dead', true)
+	composer.removeScene('src.reloading')
+
 	scene:setFixedStatics()
 
 	chad = Chad.new(screenW / 5, screenH - 75)
@@ -95,6 +104,7 @@ function scene:create(event)
 		onPauseEvent=onPauseEvent,
 		onRestartEvent=onRestartEvent,
 		onRunEvent=onRunEvent,
+		onEndRunEvent=onEndRunEvent,
 		onJumpEvent=onJumpEvent
 	}
 
@@ -151,16 +161,6 @@ function scene:destroy(event)
 	chad.destroy()
 	runnerButtons.destroy()
 
-	package.loaded[physics] = nil
-	package.loaded[Chad] = nil
-	package.loaded[Actions] = nil
-	package.loaded[FrameMaster] = nil
-	package.loaded[RunnerButtons] = nil
-	physics = nil
-	Chad = nil
-	FrameMaster = nil
-	Actions = nil
-	RunnerButtons = nil
 	frameMaster = nil
 	actions = nil
 	chad = nil

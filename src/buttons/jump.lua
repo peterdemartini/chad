@@ -21,7 +21,7 @@ function JumpButton.new(onJumpEvent)
   		defaultFile="images/buttons/button_jump.png",
   		onRelease=_onJumpEvent
   	}
-  	jumpButton.x = config.actionButtonMargin
+  	jumpButton.x = display.contentWidth - config.actionButtonSize - config.actionButtonMargin
   	jumpButton.y = display.contentHeight - config.actionButtonMargin
   end
 

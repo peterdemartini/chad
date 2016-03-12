@@ -1,6 +1,6 @@
 return {
-  debugPhysics=false,
-  debug='',
+  debugPhysics=true,
+  debug='chad',
   groundHeight=85,
   scrollMovementX=-350,
   scrollTransitionTime=1995,
@@ -9,7 +9,7 @@ return {
   gameButtonSize=70,
   gameButtonMargin=50,
   actionButtonSize=100,
-  actionButtonMargin=50,
+  actionButtonMargin=60,
   chadRunMoveX=30,
   chadRunTransitionTime=150,
   screenW=display.contentWidth * 2,

@@ -12,7 +12,7 @@ function RunnerButtons.new(buttonActions)
     jumpButton = JumpButton.new(buttonActions.onJumpEvent)
     jumpButton.build()
 
-    runButton = RunButton.new(buttonActions.onRunEvent)
+    runButton = RunButton.new(buttonActions.onRunEvent, buttonActions.onEndRunEvent)
     runButton.build()
 
     restartButton = RestartButton.new(buttonActions.onRestartEvent)

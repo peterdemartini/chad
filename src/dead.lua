@@ -13,7 +13,8 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
-	composer.removeScene('src.runner')
+	composer.removeScene('src.runner', true)
+
 	background = display.newImageRect( "images/background.jpg", display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
@@ -44,33 +45,6 @@ end
 
 function scene:destroy( event )
 	local sceneGroup = self.view
-
-	if playBtn then
-		playBtn:removeSelf()
-		playBtn = nil
-	end
-
-	if title then
-		title:removeSelf()
-		title = nil
-	end
-
-	if description then
-		description:removeSelf()
-		description = nil
-	end
-
-	if background then
-		background:removeSelf()
-		background = nil
-	end
-
-	package.loaded[physics] = nil
-	package.loaded[widget] = nil
-	physics = nil
-	widget = nil
-
-	sceneGroup:removeSelf()
 end
 
 scene:addEventListener( "create", scene )

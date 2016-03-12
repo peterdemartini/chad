@@ -10,13 +10,14 @@ function ChadCharacter.new(x, y)
 	local physics = require "physics"
 	local moveTransition
 
-	self.jumping = false
   local width, height = 76, 76
+	local jumping, running = false, false
+	local onCompleteOfRunBurst
+
   self.body = display.newImage("images/chad/chad-still-76.png")
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x, self.body.y = x, y - height
-	self.running = false
 
 	self.body.name = 'chad'
 
@@ -37,50 +38,87 @@ function ChadCharacter.new(x, y)
     return {friction=0.5, density=1.0, bounce=0.1, shape=shape};
   end
 
-	function getBodyType()
-    return "dynamic";
-  end
-
-  self.actionFire = function()
-		debug("firing")
-  end
-
 	self.actionJump = function()
-		debug("jumping")
-		self.cancel()
-		if self.jumping then
+		if jumping then
+			debug('already jumping')
 			return
 		end
-		self.jumping = true
+		debug("jumping")
+		jumping = true
+		running = false
 		local facingForward = true
 		if facingForward then
 			xForce = 300
 		else
 			xForce = -300
 		end
+		self.cancel()
     self.body:applyForce(xForce, -2000, self.body.x, self.body.y)
   end
 
 	self.actionEndJump = function()
+		if running then
+			debug("running, can't end jump")
+			return
+		end
+		if not jumping then
+			debug("not jumping, can't end jump")
+			return
+		end
 		debug("end jumping")
 		self.cancel()
-		self.jumping = false
+		jumping = false
+	end
+
+	local run = function()
+		transition.to(self.body, {x=config.chadRunMoveX, delta=true, time=config.chadRunTransitionTime, onComplete=onCompleteOfRunBurst})
+	end
+
+	onCompleteOfRunBurst = function()
+		debug('onCompleteOfRunBurst')
+		if jumping then
+			debug("jumping, can't continue running")
+			return
+		end
+		if not running then
+			debug('ending running loop')
+			return
+		end
+		debug('running and running')
+		run()
 	end
 
 	self.actionRun = function()
+		if jumping or running then
+			debug("can't run, already running or jumping")
+			return
+		end
 		debug("start running")
-		self.running = true
-		transition.to(self.body, {x=config.chadRunMoveX, delta=true, time=config.chadRunTransitionTime})
+		running = true
+		run()
 	end
 
 	self.actionEndRun = function()
-		debug("end running")
+		if jumping then
+			return
+		end
+		debug('end running')
+		running = false
 		self.cancel()
-		self.running = false
+	end
+
+	self.moveX = function(x)
+		debug('move x')
+		if running or jumping then
+			debug('already running or jumping')
+			return
+		end
+		self.cancel()
+		transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime})
 	end
 
   function addBody()
-    physics.addBody(self.getBody(), getBodyType(), getBodyOptions())
+    physics.addBody(self.body, 'dynamic', getBodyOptions())
     self.body.isFixedRotation = true
     self.body.gravityScale = 2.0
   end
@@ -91,17 +129,6 @@ function ChadCharacter.new(x, y)
 		debug('cancel')
     transition.cancel(self.body)
   end
-
-	self.moveX = function(x)
-		if self.jumping then
-			return
-		end
-		if self.running then
-			return
-		end
-		self.cancel()
-		transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime})
-	end
 
 	self.toFront = function()
 		if self.body == nil then

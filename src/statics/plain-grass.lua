@@ -31,7 +31,7 @@ function PlainGrass.new(startX, startY, width, height)
 
   self.moveX = function(x)
     self.cancel()
-    transition.to(self.getBody(), {x=self.body.x+x, time=config.scrollTransitionTime})
+    transition.to(self.body, {x=self.body.x+x, time=config.scrollTransitionTime})
     self.solidArea.moveX(x)
   end
 
