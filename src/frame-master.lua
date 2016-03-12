@@ -114,7 +114,6 @@ function FrameMaster.new(chad, sceneGroup)
     buildFrame(2, screenW - 1)
     currentFrame = 1
     currentPosition = -1
-    enterTimer()
     moveTimer = timer.performWithDelay(config.scrollDelay, enterTimer, -1)
   end
 

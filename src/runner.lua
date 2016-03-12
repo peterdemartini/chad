@@ -2,19 +2,18 @@ local config   = require 'src.config'
 local composer = require 'composer'
 local physics  = require 'physics'
 
-local Chad            = require 'src.characters.chad'
-local Actions         = require 'src.actions.defaults'
-local Wall            = require 'src.invisibles.wall'
-local FrameMaster     = require 'src.frame-master'
-local PlayPauseButton = require 'src.buttons.play-pause'
-local RestartButton   = require 'src.buttons.restart'
-local debug           = require('src.debug')('runner')
+local Chad          = require 'src.characters.chad'
+local Actions       = require 'src.actions.defaults'
+local Wall          = require 'src.invisibles.wall'
+local FrameMaster   = require 'src.frame-master'
+local RunnerButtons = require 'src.buttons.runner-buttons'
+local debug         = require('src.debug')('runner')
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, actions
 
 local fixedStatics = {}
-local frameMaster, restartButton, playPauseButton
+local frameMaster, runnerButtons
 local destroyed = false
 
 local scene = composer.newScene()
@@ -51,6 +50,16 @@ local function onPlayEvent()
 	return true
 end
 
+local function onRunEvent()
+	chad.actionRun()
+	return true
+end
+
+local function onJumpEvent()
+	chad.actionJump()
+	return true
+end
+
 function scene:setFixedStatics()
 	local sceneGroup = self.view
 	fixedStatics[1] = Wall.new('top')
@@ -81,11 +90,16 @@ function scene:create(event)
 	frameMaster = FrameMaster.new(chad, sceneGroup)
 	frameMaster.build()
 
-	restartButton = RestartButton.new(70, 70, onRestartEvent)
-	restartButton.build()
+	local buttonActions = {
+		onPlayEvent=onPlayEvent,
+		onPauseEvent=onPauseEvent,
+		onRestartEvent=onRestartEvent,
+		onRunEvent=onRunEvent,
+		onJumpEvent=onJumpEvent
+	}
 
-	playPauseButton = PlayPauseButton.new(70, 70, onPlayEvent, onPauseEvent)
-	playPauseButton.build()
+	runnerButtons = RunnerButtons.new(buttonActions)
+	runnerButtons.build()
 
 	actions = Actions.new(chad, chadDied)
 	destroyed = false
@@ -135,26 +149,21 @@ function scene:destroy(event)
 	frameMaster.destroy()
 	actions.destroy()
 	chad.destroy()
-	playPauseButton.destroy()
-	restartButton.destroy()
+	runnerButtons.destroy()
 
 	package.loaded[physics] = nil
 	package.loaded[Chad] = nil
 	package.loaded[Actions] = nil
 	package.loaded[FrameMaster] = nil
-	package.loaded[PlayPauseButton] = nil
-	package.loaded[RestartButton] = nil
+	package.loaded[RunnerButtons] = nil
 	physics = nil
 	Chad = nil
 	FrameMaster = nil
 	Actions = nil
-	PlayPauseButton = nil
-	RestartButton = nil
+	RunnerButtons = nil
 	frameMaster = nil
 	actions = nil
 	chad = nil
-	restartButton = nil
-	playPauseButton = nil
 	destroyed = true
 	-- sceneGroup:removeSelf()
 end

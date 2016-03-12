@@ -69,8 +69,8 @@ function ChadCharacter.new(x, y)
 
 	self.actionRun = function()
 		debug("start running")
-		self.cancel()
 		self.running = true
+		transition.to(self.body, {x=config.chadRunMoveX, delta=true, time=config.chadRunTransitionTime})
 	end
 
 	self.actionEndRun = function()
@@ -89,10 +89,7 @@ function ChadCharacter.new(x, y)
 
 	self.cancel = function()
 		debug('cancel')
-		if moveTransition then
-	    transition.cancel(moveTransition)
-			moveTransition = nil
-		end
+    transition.cancel(self.body)
   end
 
 	self.moveX = function(x)
@@ -100,10 +97,10 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		if self.running then
-			x = 100
+			return
 		end
 		self.cancel()
-		moveTransition = transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime})
+		transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime})
 	end
 
 	self.toFront = function()
