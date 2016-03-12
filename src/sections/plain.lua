@@ -50,6 +50,12 @@ function Plain.build(sceneGroup, startX)
     end
   end
 
+  self.cancel = function()
+    for i=1, #self.items do
+      self.items[i].cancel()
+    end
+  end
+
   return self
 end
 

@@ -36,6 +36,10 @@ function SolidArea.new(startX, startY, width, height)
 
   addBody()
 
+  self.cancel = function()
+    transition.cancel(self.body)
+  end
+
   self.destroy = function()
     debug('destroying')
     package.loaded[physics] = nil
@@ -46,6 +50,7 @@ function SolidArea.new(startX, startY, width, height)
   end
 
   self.moveX = function(x)
+    self.cancel()
     transition.to(self.getBody(), {x=self.body.x+x, time=config.scrollTransitionTime})
   end
 

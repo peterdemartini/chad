@@ -23,11 +23,16 @@ function BlueSky.new(startX)
   end
 
   self.moveX = function(x)
+    self.cancel()
     transition.to(self.getBody(), {x=self.body.x+x, time=config.scrollTransitionTime})
   end
 
   self.getX = function(x)
     return self.body.x
+  end
+
+  self.cancel = function()
+    transition.cancel(self.body)
   end
 
   self.destroy = function()

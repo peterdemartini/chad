@@ -49,7 +49,7 @@ function ChadCharacter.new(x, y)
 		if self.jumping then
 			return
 		end
-		transition.cancel(self.getBody())
+		self.cancel()
 		self.jumping = true
 		local facingForward = true
 		if facingForward then
@@ -83,6 +83,10 @@ function ChadCharacter.new(x, y)
 
 	addBody()
 
+	self.cancel = function()
+    transition.cancel(self.body)
+  end
+
 	self.moveX = function(x)
 		if self.jumping then
 			return
@@ -90,6 +94,7 @@ function ChadCharacter.new(x, y)
 		if self.running then
 			x = x * -3
 		end
+		self.cancel()
 		transition.to(self.getBody(), {x=x, delta=true, time=config.scrollTransitionTime})
 	end
 
