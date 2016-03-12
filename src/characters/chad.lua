@@ -8,6 +8,7 @@ function ChadCharacter.new(x, y)
 	local self = {};
 
 	local physics = require "physics"
+	local moveTransition
 
 	self.jumping = false
   local width, height = 76, 76
@@ -46,10 +47,10 @@ function ChadCharacter.new(x, y)
 
 	self.actionJump = function()
 		debug("jumping")
+		self.cancel()
 		if self.jumping then
 			return
 		end
-		self.cancel()
 		self.jumping = true
 		local facingForward = true
 		if facingForward then
@@ -62,16 +63,19 @@ function ChadCharacter.new(x, y)
 
 	self.actionEndJump = function()
 		debug("end jumping")
+		self.cancel()
 		self.jumping = false
 	end
 
 	self.actionRun = function()
 		debug("start running")
+		self.cancel()
 		self.running = true
 	end
 
 	self.actionEndRun = function()
 		debug("end running")
+		self.cancel()
 		self.running = false
 	end
 
@@ -84,7 +88,11 @@ function ChadCharacter.new(x, y)
 	addBody()
 
 	self.cancel = function()
-    transition.cancel(self.body)
+		debug('cancel')
+		if moveTransition then
+	    transition.cancel(moveTransition)
+			moveTransition = nil
+		end
   end
 
 	self.moveX = function(x)
@@ -92,10 +100,10 @@ function ChadCharacter.new(x, y)
 			return
 		end
 		if self.running then
-			x = x * -3
+			x = 100
 		end
 		self.cancel()
-		transition.to(self.getBody(), {x=x, delta=true, time=config.scrollTransitionTime})
+		moveTransition = transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime})
 	end
 
 	self.toFront = function()
@@ -109,7 +117,7 @@ function ChadCharacter.new(x, y)
 		debug('destroying')
 		package.loaded[physics] = nil
     physics = nil
-    transition.cancel(self.body)
+    self.cancel()
     self.body:removeSelf()
     self.body = nil
 	end

@@ -18,8 +18,9 @@ function FrameMaster.new(chad, sceneGroup)
     if layoutItems[frame] == nil then
       return
     end
-  	debug('buildFrame', frame)
-  	frames[frame] = layoutItems[frame].build(sceneGroup, startX - 5)
+  	debug('buildFrame', frame, startX)
+    frames[frame] = layoutItems[frame].new(sceneGroup, startX)
+  	frames[frame].build()
   end
 
   local function cancelFrame(frame)
@@ -58,10 +59,9 @@ function FrameMaster.new(chad, sceneGroup)
       debug('deleteCurrentFrame')
       deleteFrame(currentFrame)
       currentFrame = currentFrame + 1
-      local nextStartX = getRemainderOfFrame()
       local nextFrame = currentFrame + 1
+      local nextStartX = getRemainderOfFrame()
       buildFrame(nextFrame, nextStartX)
-      moveFrame(currentFrame)
     end
   end
 
@@ -114,9 +114,10 @@ function FrameMaster.new(chad, sceneGroup)
     buildFrame(2, screenW - 1)
     currentFrame = 1
     currentPosition = -1
+    enterTimer()
+    moveTimer = timer.performWithDelay(config.scrollDelay, enterTimer, -1)
   end
 
-  moveTimer = timer.performWithDelay(config.scrollDelay, enterTimer, -1)
 
   return self
 end

@@ -1,11 +1,11 @@
 return {
   debugPhysics=false,
-  debug='frame-master',
+  debug='',
   groundHeight=85,
-  scrollMovementX=-145,
-  scrollTransitionTime=995,
-  scrollDelay=1000,
+  scrollMovementX=-350,
+  scrollTransitionTime=1995,
+  scrollDelay=2000,
   currentPosition=0,
-  screenW=display.contentWidth + 100,
+  screenW=display.contentWidth * 2,
   screenH=display.contentHeight
 }

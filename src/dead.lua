@@ -6,8 +6,6 @@ local widget = require "widget"
 local playBtn, background, title, description
 
 local function onPlayBtnRelease()
-	composer.removeScene("src.reloading")
-	composer.removeScene("src.runner")
 	composer.gotoScene("src.runner", "fade", 500)
 	return true
 end
@@ -15,6 +13,7 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
+	composer.removeScene('src.runner')
 	background = display.newImageRect( "images/background.jpg", display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0

@@ -18,19 +18,22 @@ function generateChunk(startX)
   return PlainGrass.new(x,y+10,width,height)
 end
 
-function Plain.build(sceneGroup, startX)
+function Plain.new(sceneGroup, startX)
   debug('building...', startX)
   local physics = require 'physics'
   local self = {}
   self.items = {}
-  self.items[1] = BlueSky.new(startX)
-  sceneGroup:insert(self.items[1].getBody())
 
-  self.items[2] = PlainGrass.new(startX, screenH, screenW, config.groundHeight)
-  sceneGroup:insert(self.items[2].getBody())
+  self.build = function()
+    self.items[1] = BlueSky.new(startX)
+    sceneGroup:insert(self.items[1].getBody())
 
-  self.items[3] = generateChunk(startX)
-  sceneGroup:insert(self.items[3].getBody())
+    self.items[2] = PlainGrass.new(startX, screenH, screenW, config.groundHeight)
+    sceneGroup:insert(self.items[2].getBody())
+
+    self.items[3] = generateChunk(startX)
+    sceneGroup:insert(self.items[3].getBody())
+  end
 
   self.destroy = function()
     debug('destroying...')
