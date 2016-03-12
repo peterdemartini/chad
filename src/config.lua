@@ -1,5 +1,5 @@
 return {
-  debugPhysics=true,
+  debugPhysics=false,
   debug='frame-master',
   groundHeight=85,
   scrollMovementX=-145,

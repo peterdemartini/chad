@@ -12,12 +12,12 @@ function Actions.new(chad, chadDied)
       return
     end
     local obj1Name, obj2Name = event.object1.name, event.object2.name
-    if obj2Name == 'chad' then
-      if obj1Name == 'solid' and event.phase == 'began' then
+    if obj2Name == 'chad' or obj1Name == 'chad' then
+      if (obj1Name == 'solid' or obj2Name == 'solid') and event.phase == 'began' then
         debug('solid collided with chad')
         chad.actionEndJump()
       end
-      if obj1Name == 'death-wall' and event.phase == 'began' then
+      if (obj1Name == 'death-wall' or obj2Name == 'death-wall') and event.phase == 'began' then
         debug('death-wall collided with chad')
         timer.performWithDelay(100, chadDied)
       end

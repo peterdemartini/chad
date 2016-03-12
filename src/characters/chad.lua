@@ -30,10 +30,10 @@ function ChadCharacter.new(x, y)
 			width*0.3, height*-0.5,
 			width*0.5, height*-0.4,
 			width*0.5, 0,
-			width*0.3, height*0.5,
-			0, height*0.50
+			width*0.3, height*0.45,
+			0, height*0.45
 		}
-    return {friction=0.5, density=1.0, bounce=0.1, radius=35};
+    return {friction=0.5, density=1.0, bounce=0.1, shape=shape};
   end
 
 	function getBodyType()
