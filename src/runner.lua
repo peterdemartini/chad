@@ -18,7 +18,7 @@ local frameMaster, restartButton, playButton, pauseButton
 local scene   = composer.newScene()
 physics.start(); physics.pause()
 
-if config.debug then
+if config.debugPhysics then
 	debug('Setting Draw Mode to Hybrid')
 	physics.setDrawMode("hybrid")
 end
@@ -34,7 +34,7 @@ local function onPauseEvent()
 	debug('onPauseEvent()')
 	frameMaster.pause()
 	actions.pause()
-	physics.stop()
+	physics.pause()
 	playButton.isVisible = true
 	pauseButton.isVisible = false
 	return true
