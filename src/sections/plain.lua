@@ -9,7 +9,8 @@ local screenW, screenH = config.screenW, config.screenH
 math.randomseed(os.time())
 
 function generateChunk(startX)
-  local width, height = math.random(100, screenW / 2), math.random(50, screenH / 4)
+  local width = math.random(100, screenW / 2)
+  local height = math.random(50, screenH / 4)
   local newStartX = startX + (screenW/2)
   local endX = (startX + screenW) - width
   local x = math.random(newStartX, endX)

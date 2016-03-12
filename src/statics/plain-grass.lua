@@ -1,5 +1,4 @@
 local debug     = require('src.debug')('plain-grass')
-local SolidArea = require 'src.invisibles.solid-area'
 local config    = require 'src.config'
 
 local PlainGrass = {}
@@ -17,22 +16,28 @@ function PlainGrass.new(startX, startY, width, height)
   self.body.anchorY = 1
   self.body.x, self.body.y = startX, startY
 
-  self.body.name = "ground"
+  self.body.name = 'solid'
 
-  self.solidArea = SolidArea.new(startX, startY - height + 10, width, height - 10)
+  function addBody()
+    local halfW = width/2
+    local halfH = height/2
+    local shape = {
+      -halfW,-halfH + 8,
+      halfW,-halfH + 8,
+      halfW,halfH,
+      -halfW,halfH
+    }
+    debug('shape', halfW, halfW,width,height)
+    physics.addBody(self.body, 'static', {friction=1.0, density=2.0, bounce=0, shape=shape})
+  end
 
   self.getBody = function()
     return self.body;
   end
 
-  self.getSolidBody = function()
-    return self.solidArea.getBody();
-  end
-
   self.moveX = function(x)
     self.cancel()
     transition.to(self.body, {x=self.body.x+x, time=config.scrollTransitionTime})
-    self.solidArea.moveX(x)
   end
 
   self.getX = function()
@@ -41,7 +46,6 @@ function PlainGrass.new(startX, startY, width, height)
 
   self.cancel = function()
     transition.cancel(self.body)
-    self.solidArea.cancel()
   end
 
   self.destroy = function()
@@ -51,9 +55,9 @@ function PlainGrass.new(startX, startY, width, height)
     transition.cancel(self.body)
     self.body:removeSelf()
     self.body = nil
-    self.solidArea.destroy()
-    self.solidArea = nil
   end
+
+  addBody()
 
   return self;
 end
