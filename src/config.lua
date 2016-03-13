@@ -1,6 +1,6 @@
 return {
   debugPhysics=false,
-  debug='',
+  debug='chad',
   groundHeight=85,
   scrollMovementX=-350,
   scrollTransitionTime=1995,
