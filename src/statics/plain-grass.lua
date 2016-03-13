@@ -1,4 +1,5 @@
 local debug     = require('src.debug')('plain-grass')
+local imagePath = require 'src.image-path'
 local config    = require 'src.config'
 
 local PlainGrass = {}
@@ -11,7 +12,7 @@ function PlainGrass.new(startX, startY, width, height)
   local self = {};
   self.body = display.newRect((startX + (width  / 2)), (startY + (height  / 2)), width, height)
 
-  self.body.fill = {type="image", filename='images/level-1-ground.png'}
+  self.body.fill = {type="image", filename=imagePath('grass-chunk.png')}
   self.body.anchorX = 0
   self.body.anchorY = 1
   self.body.x, self.body.y = startX, startY

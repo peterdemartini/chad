@@ -1,7 +1,8 @@
-local composer = require( "composer" )
-local scene = composer.newScene()
+local imagePath = require 'src.image-path'
+local composer  = require 'composer'
+local widget    = require 'widget'
 
-local widget = require "widget"
+local scene = composer.newScene()
 
 local playBtn, background, title, description
 
@@ -15,31 +16,55 @@ function scene:create( event )
 
 	composer.removeScene('src.runner', true)
 
-	background = display.newImageRect( "images/background.jpg", display.contentWidth, display.contentHeight )
+	background = display.newImageRect(imagePath('background.jpg'), display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
 	background.x, background.y = 0, 0
 
-	title = display.newText("Chad Died", 264, 42, "Arial", 60 )
+	titleShadow = display.newText("Chad Died", 264, 42, native.systemFontBold,90)
+	titleShadow:setFillColor( 0.3 )
+	titleShadow.x = (display.contentWidth * 0.5) + 4
+	titleShadow.y = 104
+
+	title = display.newText("Chad Died", 264, 42, native.systemFontBold,90)
+	title:setFillColor( 1 )
 	title.x = display.contentWidth * 0.5
 	title.y = 100
+	title:toFront()
 
-  description = display.newText("And you probably don't care", 264, 42, "Arial", 20 )
-  description.x = display.contentWidth * 0.5
-  description.y = 200
+	descriptionShadow = display.newText("And you probably don't even care.", 264, 42, native.systemFont,25)
+	descriptionShadow:setFillColor( 0.1 )
+	descriptionShadow.x = (display.contentWidth * 0.5) + 2
+	descriptionShadow.y = 175 + 2
+
+	description = display.newText("And you probably don't even care.", 264, 42, native.systemFont,25)
+	description:setFillColor( 1 )
+	description.x = display.contentWidth * 0.5
+	description.y = 175
+	description:toFront()
 
 	playBtn = widget.newButton{
 		label="Restart Game",
-		labelColor = { default={255}, over={128} },
-		width=300, height=100,
+		labelColor = { default={1}, over={1} },
+		fontSize=40,
+		font=native.systemFontBold,
 		onRelease = onPlayBtnRelease
 	}
 	playBtn.x = display.contentWidth * 0.5
-	playBtn.y = display.contentHeight - 125
+	playBtn.y = display.contentHeight * 0.85
+
+	playBtnShadow = display.newText("Restart Game", 264, 42, native.systemFontBold,40)
+	playBtnShadow:setFillColor( 0.3 )
+	playBtnShadow.x = (display.contentWidth * 0.5) + 5
+	playBtnShadow.y = (display.contentHeight * 0.85) + 5
+
 
 	sceneGroup:insert( background )
+	sceneGroup:insert( titleShadow )
 	sceneGroup:insert( title )
-  sceneGroup:insert( description )
+	sceneGroup:insert( descriptionShadow )
+	sceneGroup:insert( description )
+	sceneGroup:insert( playBtnShadow )
 	sceneGroup:insert( playBtn )
 end
 

@@ -1,5 +1,7 @@
-local debug   = require('src.debug')('blue-sky')
-local config  = require 'src.config'
+local debug     = require('src.debug')('blue-sky')
+local config    = require 'src.config'
+local imagePath = require 'src.image-path'
+
 local BlueSky = {}
 
 local screenW, screenH = config.screenW, config.screenH
@@ -12,7 +14,7 @@ function BlueSky.new(startX)
   self.height = 500
 
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
-  self.body.fill = {type="image", filename='images/sky/blue-sky.png'}
+  self.body.fill = {type="image", filename=imagePath('blue-sky.png')}
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x, self.body.y = startX, 0

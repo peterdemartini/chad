@@ -1,5 +1,6 @@
-local debug  = require('src.debug')('chad')
-local config = require('src.config')
+local debug     = require('src.debug')('chad')
+local config    = require 'src.config'
+local imagePath = require 'src.image-path'
 
 local ChadCharacter = {}
 
@@ -13,7 +14,7 @@ function ChadCharacter.new(x, y)
 	local jumping, running = false, false
 	local onCompleteOfRunBurst, runningTransition
 
-  self.body = display.newImage("images/chad/chad-still-76.png")
+  self.body = display.newImageRect(imagePath('chad-still.png'), width, height)
   self.body.anchorX = 0
   self.body.anchorY = 0
   self.body.x, self.body.y = x, y - height
