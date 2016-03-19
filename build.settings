@@ -18,8 +18,8 @@ settings =
 	excludeFiles =
 	{
 		-- Include only the necessary icon files on each platform
-		iphone = { "images/build/*dpi/*.png", },
-		android = { "images/build/ios/*.png", "images/icons/Chad-Icon-*.png", "images/icons/Chad-Icon-*@2x.png", },
+		iphone = { "images/33/*", "images/build/*dpi/*.png"},
+		android = { "images/33/*", "images/build/ios/*.png", "images/icons/Chad-Icon-*.png", "images/icons/Chad-Icon-*@2x.png", },
 	},
 
 	--
