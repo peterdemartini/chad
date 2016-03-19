@@ -10,6 +10,9 @@ return function(rawFile)
 	local folderName = 'ios'
 	if platform == 'Android' then
 		local densityName = system.getInfo("androidDisplayDensityName")
+		if densityName == nil or densityName == 'unknown' then
+			densityName = 'xxhdpi'
+		end
 		folderName = 'drawable-'..densityName
 	end
   return 'images/build/'..folderName..'/'..filename

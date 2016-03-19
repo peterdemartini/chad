@@ -47,6 +47,7 @@ function scene:create( event )
 		label="Restart Game",
 		labelColor = { default={1}, over={1} },
 		fontSize=40,
+		fillColor={0, 0, 0, 0},
 		font=native.systemFontBold,
 		onRelease = onPlayBtnRelease
 	}

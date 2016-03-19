@@ -37,6 +37,7 @@ function scene:create( event )
 		labelColor = { default={1}, over={1} },
 		fontSize=40,
 		font=native.systemFontBold,
+		fillColor={0, 0, 0, 0},
 		onRelease = onPlayBtnRelease
 	}
 	playBtn.x = display.contentWidth * 0.5

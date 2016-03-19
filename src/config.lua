@@ -2,7 +2,7 @@ return {
   debugPhysics=false,
   debug='chad',
   groundHeight=85,
-  scrollMovementX=-350,
+  scrollMovementX=-500,
   scrollTransitionTime=1995,
   scrollDelay=2000,
   currentPosition=0,
