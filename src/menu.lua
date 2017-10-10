@@ -16,7 +16,7 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
-	background = display.newImageRect(imagePath('background.jpg'), display.contentWidth, display.contentHeight )
+	background = display.newImageRect(imagePath("space-background.png"), display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
 	background.x, background.y = 0, 0
