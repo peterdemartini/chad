@@ -16,15 +16,15 @@ function ChadCharacter.new(x, y)
 	local jumpCount = 0
 	local onCompleteOfRunBurst, runningTransition
 
-  self.body = display.newImageRect(imagePath('chad-still.png'), width, height)
-  self.body.anchorX = 0
-  self.body.anchorY = 0
-  self.body.x, self.body.y = x, y - height
+  character = display.newImageRect(imagePath('chad-still.png'), width, height)
+  character.anchorX = 0
+  character.anchorY = 0
+  character.x, character.y = x, y - height
 
-	self.body.name = 'chad'
+	character.name = 'chad'
 
   self.getBody = function()
-    return self.body;
+    return character;
   end
 
   function getBodyOptions()
@@ -40,114 +40,71 @@ function ChadCharacter.new(x, y)
     return {friction=0.5, density=1.0, bounce=0.1, shape=shape};
   end
 
-	self.actionJump = function()
-		if jumpCount > 2 then
-			debug('[jump] jump count exceeded')
-			return
-		end
-		jumpCount = jumpCount + 1
-		debug("[jump] jump")
-		jumping = true
-		running = false
-		self.cancel()
-    self.body:applyForce(200, -1800, self.body.x, self.body.y)
-  end
-
-	self.actionEndJump = function()
-		if not jumping then
-			debug("[end jump] not jumping, can't end jump")
-			return
-		end
-		debug("[end jump] end jumping")
-		jumping = false
-		jumpCount = 0
-		self.resume()
-	end
-
-	local run = function()
+	local startRunning = function()
 		debug('[run]')
 		if jumping or running then
 			debug("[action run] can't run, already running or jumping")
 			return
 		end
-		local onCancel = function()
-			debug('[run] was canceled')
-			runningTransition = nil
-			running = false
-		end
-		self.cancel()
 		running = true
-		runningTransition = transition.to(self.body, {x=config.chadRunMoveX, delta=true, time=config.chadRunTransitionTime, onCancel=onCancel, onComplete=onCompleteOfRunBurst})
+		local vx, vy = character:getLinearVelocity()
+    character:setLinearVelocity( vx, 0 )
+    character:applyForce( -10, nil, character.x, character.y )
 	end
 
-	onCompleteOfRunBurst = function()
-		runningTransition = nil
-		debug('[on run burst]')
-		if jumping then
-			debug("[on run burst] jumping, can't continue running")
-			return
+  physics.addBody(character, 'dynamic', getBodyOptions(), { isSensor = true })
+  character.isFixedRotation = true
+	character.sensorOverlaps = 0
+  character.gravityScale = 2.0
+
+	local function onJumpEvent(event)
+		if ( event.phase == "began" ) then
+			if jumpCount > 2 then
+				debug('[jump] jump count exceeded')
+				return
+			end
+			jumpCount = jumpCount + 1
+			debug("[jump] jump")
+			jumping = true
+			running = false
+			local vx, vy = character:getLinearVelocity()
+			character:setLinearVelocity( vx, 0 )
+			character:applyLinearImpulse( 5, -50, character.x, character.y )
 		end
-		if not running then
-			debug('[on run burst] ending running loop')
-			return
-		end
-		debug('[on run burst] running and running')
-		run()
 	end
+	Runtime:addEventListener("touch", onJumpEvent)
 
-	self.moveX = function(x)
-		debug('[move x]')
-		if running then
-			debug('[move x] already running')
-			return
-		end
-		if jumping then
-			debug('[move x] already jumping')
-			return
-		end
-		debug('[move x] starting transition')
-		debug('[move x] x =', x)
-		self.cancel()
-		transition.to(self.body, {x=x, delta=true, time=config.scrollTransitionTime,onCancel=onCancel,onComplete=onComplete})
+	local function sensorCollide( self, event )
+    if ( event.selfElement == 2 and event.other.objType == "solid" ) then
+	        if ( event.phase == "began" ) then
+	            self.sensorOverlaps = self.sensorOverlaps + 1
+	        elseif ( event.phase == "ended" ) then
+	            self.sensorOverlaps = self.sensorOverlaps - 1
+							jumpCount = 0
+	        end
+	    end
 	end
+	character.collision = sensorCollide
+	character:addEventListener( "collision" )
 
-  function addBody()
-    physics.addBody(self.body, 'dynamic', getBodyOptions())
-    self.body.isFixedRotation = true
-    self.body.gravityScale = 2.0
-  end
-
-	addBody()
-
-	self.cancel = function()
-		debug('[cancel]')
-		if self.body then
-			debug('[cancel] all')
-			transition.cancel(self.body)
-		end
-  end
-
-	self.resume = function()
-		debug('[resume]')
-		self.moveX(config.scrollMovementX)
-		run()
-  end
+	self.moveX = function()
+	end
 
 	self.toFront = function()
-		if self.body == nil then
+		if character == nil then
 			debug('[to front] body nil')
 			return
 		end
-		self.body:toFront()
+		character:toFront()
 	end
 
 	self.destroy = function()
 		debug('[destroying]')
 		package.loaded[physics] = nil
     physics = nil
-    self.cancel()
-    self.body:removeSelf()
-    self.body = nil
+		Runtime:addEventListener("touch", onJumpEvent)
+    character:removeSelf()
+    character = nil
 	end
 
 	return self;

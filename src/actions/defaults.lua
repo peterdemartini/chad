@@ -11,18 +11,8 @@ function Actions.new(chad, chadDied)
     if not running then
       return
     end
-    local obj1Name, obj2Name = event.object1.name, event.object2.name
-    if obj2Name == 'chad' or obj1Name == 'chad' then
-      if (obj1Name == 'solid' or obj2Name == 'solid') and event.phase == 'began' then
-        debug('solid collided with chad')
-        chad.actionEndJump()
-      end
-      if (obj1Name == 'death-wall' or obj2Name == 'death-wall') and event.phase == 'began' then
-        debug('death-wall collided with chad')
-        timer.performWithDelay(10, chadDied)
-      end
-      if (obj1Name == 'pit' or obj2Name == 'pit') and event.phase == 'began' then
-        debug('chad fell in a pit')
+    if event.object1.name == 'chad' or event.object2.name == 'chad' then
+      if (event.object1.willKill == true or event.object2.willKill == true) and event.phase == 'began' then
         timer.performWithDelay(10, chadDied)
       end
     end

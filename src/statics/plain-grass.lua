@@ -17,7 +17,8 @@ function PlainGrass.new(startX, startY, width, height)
   self.body.anchorY = 1
   self.body.x, self.body.y = startX, startY
 
-  self.body.name = 'solid'
+  self.body.name = 'plain-grass'
+  self.body.objType = "solid"
 
   function addBody()
     local halfW = width/2

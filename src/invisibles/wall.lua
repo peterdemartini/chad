@@ -29,16 +29,12 @@ function Wall.new(position)
   end
 
   self.body = display.newRect(x, y, width, height)
-  -- self.body.fill =  { 0.3, 1, 0.5 }
-  -- self.body.isVisible = true
   self.body.anchorX = anchorX
   self.body.anchorY = anchorY
   self.body.x, self.body.y = x, y
-  if willKillChad then
-    self.body.name = 'death-wall'
-  else
-    self.body.name = 'wall'
-  end
+  self.body.name = 'wall'
+  self.body.willKill = true
+  self.body.objType = 'solid'
 
   self.getBody = function()
     return self.body;

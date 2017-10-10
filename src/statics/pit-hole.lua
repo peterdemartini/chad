@@ -17,7 +17,9 @@ function PitHole.new(startX, startY, width, height)
   self.body.anchorY = 1
   self.body.x, self.body.y = startX, startY
 
-  self.body.name = 'pit'
+  self.body.name = 'pit-hole'
+  self.body.objType = "solid"
+  self.body.willKill = true
 
   function addBody()
     local halfW = width/2

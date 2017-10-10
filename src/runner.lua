@@ -50,14 +50,6 @@ local function onPlayEvent()
 	return true
 end
 
-local function onJumpEvent(event)
-	debug("[JUMP EVENT] on jump event")
-	if ( event.phase == "began" ) then
-		chad.actionJump()
-	end
-	return true
-end
-
 function scene:setFixedStatics()
 	local sceneGroup = self.view
 	fixedStatics[1] = Wall.new('top')
@@ -96,8 +88,6 @@ function scene:create(event)
 		onPauseEvent=onPauseEvent,
 		onRestartEvent=onRestartEvent,
 	}
-
-	Runtime:addEventListener("touch", onJumpEvent)
 
 	runnerButtons = RunnerButtons.new(buttonActions)
 	runnerButtons.build()
@@ -146,7 +136,7 @@ function scene:destroy(event)
 		fixedStatics[i].destroy()
 		fixedStatics[i] = nil
 	end
-	Runtime:addEventListener("touch", onJumpEvent)
+
 	frameMaster.destroy()
 	actions.destroy()
 	chad.destroy()
