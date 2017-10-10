@@ -11,7 +11,8 @@ function ChadCharacter.new(x, y)
 	local physics = require "physics"
 
   local width, height = 76, 76
-	local jumping, running = false, false
+	local jumping = false
+	local running = true
 	local jumpCount = 0
 	local onCompleteOfRunBurst, runningTransition
 
@@ -53,10 +54,6 @@ function ChadCharacter.new(x, y)
   end
 
 	self.actionEndJump = function()
-		if running then
-			debug("[end jump] running, can't end jump")
-			return
-		end
 		if not jumping then
 			debug("[end jump] not jumping, can't end jump")
 			return
@@ -69,11 +66,17 @@ function ChadCharacter.new(x, y)
 
 	local run = function()
 		debug('[run]')
+		if jumping or running then
+			debug("[action run] can't run, already running or jumping")
+			return
+		end
 		local onCancel = function()
 			debug('[run] was canceled')
 			runningTransition = nil
 			running = false
 		end
+		self.cancel()
+		running = true
 		runningTransition = transition.to(self.body, {x=config.chadRunMoveX, delta=true, time=config.chadRunTransitionTime, onCancel=onCancel, onComplete=onCompleteOfRunBurst})
 	end
 
@@ -90,27 +93,6 @@ function ChadCharacter.new(x, y)
 		end
 		debug('[on run burst] running and running')
 		run()
-	end
-
-	self.actionRun = function()
-		if jumping or running then
-			debug("[action run] can't run, already running or jumping")
-			return
-		end
-		debug("[action run] start running")
-		running = true
-		self.cancel()
-		run()
-	end
-
-	self.actionEndRun = function()
-		if jumping then
-			debug("[action end run] can't end run, already jumping")
-			return
-		end
-		debug('[action end run] end running')
-		running = false
-		self.resume()
 	end
 
 	self.moveX = function(x)
@@ -148,6 +130,7 @@ function ChadCharacter.new(x, y)
 	self.resume = function()
 		debug('[resume]')
 		self.moveX(config.scrollMovementX)
+		run()
   end
 
 	self.toFront = function()

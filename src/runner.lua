@@ -10,7 +10,7 @@ local RunnerButtons = require 'src.buttons.runner-buttons'
 local debug         = require('src.debug')('runner')
 
 local screenW, screenH = display.contentWidth, display.contentHeight
-local chad, actions
+local chad, actions, touchObject
 
 local fixedStatics = {}
 local frameMaster, runnerButtons
@@ -50,19 +50,11 @@ local function onPlayEvent()
 	return true
 end
 
-local function onRunEvent()
-	chad.actionRun()
-	return true
-end
-
-local function onEndRunEvent()
-	chad.actionEndRun()
-	return true
-end
-
-
-local function onJumpEvent()
-	chad.actionJump()
+local function onJumpEvent(event)
+	debug("[JUMP EVENT] on jump event")
+	if ( event.phase == "began" ) then
+		chad.actionJump()
+	end
 	return true
 end
 
@@ -103,10 +95,9 @@ function scene:create(event)
 		onPlayEvent=onPlayEvent,
 		onPauseEvent=onPauseEvent,
 		onRestartEvent=onRestartEvent,
-		onRunEvent=onRunEvent,
-		onEndRunEvent=onEndRunEvent,
-		onJumpEvent=onJumpEvent
 	}
+
+	Runtime:addEventListener("touch", onJumpEvent)
 
 	runnerButtons = RunnerButtons.new(buttonActions)
 	runnerButtons.build()
@@ -155,7 +146,7 @@ function scene:destroy(event)
 		fixedStatics[i].destroy()
 		fixedStatics[i] = nil
 	end
-
+	Runtime:addEventListener("touch", onJumpEvent)
 	frameMaster.destroy()
 	actions.destroy()
 	chad.destroy()
