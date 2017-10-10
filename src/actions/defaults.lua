@@ -21,6 +21,10 @@ function Actions.new(chad, chadDied)
         debug('death-wall collided with chad')
         timer.performWithDelay(10, chadDied)
       end
+      if (obj1Name == 'pit' or obj2Name == 'pit') and event.phase == 'began' then
+        debug('chad fell in a pit')
+        timer.performWithDelay(10, chadDied)
+      end
     end
   end
 

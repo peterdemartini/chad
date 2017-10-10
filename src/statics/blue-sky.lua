@@ -11,7 +11,7 @@ function BlueSky.new(startX)
   local physics = require "physics"
   local self = {};
   self.width = screenW
-  self.height = 500
+  self.height = screenH
 
   self.body = display.newRect(display.contentCenterX, display.contentCenterY, self.width, self.height)
   self.body.fill = {type="image", filename=imagePath('blue-sky.png')}
