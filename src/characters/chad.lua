@@ -12,6 +12,7 @@ function ChadCharacter.new(x, y)
 
   local width, height = 76, 76
 	local jumping, running = false, false
+	local jumpCount = 0
 	local onCompleteOfRunBurst, runningTransition
 
   self.body = display.newImageRect(imagePath('chad-still.png'), width, height)
@@ -39,10 +40,11 @@ function ChadCharacter.new(x, y)
   end
 
 	self.actionJump = function()
-		if jumping then
-			debug('[jump] already jumping')
+		if jumpCount > 2 then
+			debug('[jump] jump count exceeded')
 			return
 		end
+		jumpCount = jumpCount + 1
 		debug("[jump] jump")
 		jumping = true
 		running = false
@@ -61,6 +63,7 @@ function ChadCharacter.new(x, y)
 		end
 		debug("[end jump] end jumping")
 		jumping = false
+		jumpCount = 0
 		self.resume()
 	end
 
