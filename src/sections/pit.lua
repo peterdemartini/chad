@@ -24,10 +24,10 @@ function Pit.new(sceneGroup, startX)
     sceneGroup:insert(self.items[2].getBody())
 
     self.items[3] = PitHole.new((startX + (sectionWidth)), screenH, sectionWidth, (config.groundHeight / 2))
-    sceneGroup:insert(self.items[2].getBody())
+    sceneGroup:insert(self.items[3].getBody())
 
     self.items[4] = PlainGrass.new((startX + (sectionWidth * 2)), screenH, sectionWidth, config.groundHeight)
-    sceneGroup:insert(self.items[2].getBody())
+    sceneGroup:insert(self.items[4].getBody())
   end
 
   self.destroy = function()
