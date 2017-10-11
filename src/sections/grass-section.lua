@@ -4,9 +4,9 @@ local BlueSky    = require 'src.statics.blue-sky'
 local config     = require 'src.config'
 local debug      = require('src.debug')('plain-section')
 
-local Plain = {}
+local GrassSection = {}
 
-local screenW, screenH = config.screenW, config.screenH
+local screenW, screenH = display.contentWidth, display.contentHeight
 local sectionWidth = (screenW / 3)
 math.randomseed(os.time())
 
@@ -17,24 +17,15 @@ function generateChunk(startX)
   local endX = (startX + screenW) - width
   local x = math.random(newStartX, endX)
   local y = screenH - config.groundHeight
-  debug('generating chunk', width, height, x, y)
   return PlainGrass.new(x,y+10,width,height)
 end
 
-function Plain.new(startX)
-  local group = display:newGroup()
-
-  group:insert(BlueSky.new(startX))
-  group:insert(PlainGrass.new(startX, screenH, screenW, config.groundHeight))
-  group:insert(generateChunk(startX))
-
-  function group:finalize()
-    group:removeEventListener("finalize")
-  end
-
-  group:addEventListener("finalize")
-
-  return group
+function GrassSection.new(startX)
+  return {
+    BlueSky.new(startX),
+    PlainGrass.new(startX, screenH, screenW, config.groundHeight),
+    generateChunk(startX),
+  }
 end
 
-return Plain
+return GrassSection

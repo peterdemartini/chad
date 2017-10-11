@@ -5,7 +5,7 @@ local physics   = require "physics"
 
 local PitHole = {}
 
-local screenW, screenH = config.screenW, config.screenH
+local screenW, screenH = display.contentWidth, display.contentHeight
 
 function PitHole.new(startX, startY, width, height)
   local rect = display.newRect((startX + (width  / 2)), (startY + (height  / 2)), width, height)
@@ -15,7 +15,7 @@ function PitHole.new(startX, startY, width, height)
   rect.x, rect.y = startX, startY
 
   rect.name = 'pit-hole'
-  rect.objType = "solid"
+  rect.willStop = true
   rect.willKill = true
 
   local halfW = width/2
@@ -26,7 +26,7 @@ function PitHole.new(startX, startY, width, height)
     halfW,halfH,
     -halfW,halfH
   }
-  physics.addBody(rect, 'static', {friction=1.0, density=0, bounce=0, shape=shape})
+  physics.addBody(rect, 'kinematic', {density=1.0,friction=1.0,bounce=0,shape=shape})
   return rect;
 end
 

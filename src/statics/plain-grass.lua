@@ -5,7 +5,7 @@ local physics   = require "physics"
 
 local PlainGrass = {}
 
-local screenW, screenH = config.screenW, config.screenH
+local screenW, screenH = display.contentWidth, display.contentHeight
 
 function PlainGrass.new(startX, startY, width, height)
   local rect = display.newRect((startX + (width  / 2)), (startY + (height  / 2)), width, height)
@@ -14,8 +14,8 @@ function PlainGrass.new(startX, startY, width, height)
   rect.anchorY = 1
   rect.x, rect.y = startX, startY
 
-  rect.name = 'grass-chunk'
-  rect.objType = "solid"
+  rect.name = 'plain-grass'
+  rect.willStop = true
   rect.willKill = false
 
   local halfW = width/2
@@ -26,7 +26,7 @@ function PlainGrass.new(startX, startY, width, height)
     halfW,halfH,
     -halfW,halfH
   }
-  physics.addBody(rect, 'static', {friction=1.0, density=0, bounce=0, shape=shape})
+  physics.addBody(rect, 'kinematic', {density=1.0,friction=1.0, bounce=0.2,shape=shape})
   return rect;
 end
 

@@ -2,15 +2,18 @@ application =
 {
 	content =
 	{
-		width = 577,
-		height = 1024,
+		width = 800,
+		height = 1280,
 		scale = "letterBox",
-		fps = 30,
+		xAlign = "center",
+		yAlign = "center",
 
 		imageSuffix =
 		{
 			["@2x"] = 2,
 			["@3x"] = 3,
 		},
+		fps = 60,
 	},
+
 }

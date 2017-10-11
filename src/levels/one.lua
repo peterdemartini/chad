@@ -1,60 +1,54 @@
-local Plain  = require 'src.sections.plain'
-local Pit    = require 'src.sections.pit'
-local config = require 'src.config'
-local debug  = require('src.debug')('frame-master')
+local GrassSection       = require 'src.sections.grass-section'
+local PitSection         = require 'src.sections.pit-section'
+local SimpleGrassSection = require 'src.sections.simple-grass-section'
+local config             = require 'src.config'
+local debug              = require('src.debug')('level-one')
 
 local LevelOne = {}
 
-local series = {
-  Plain,
-  Pit,
-  Plain,
-  Plain,
-  Plain,
-  Pit,
-  Plain,
-  Pit,
-  Plain,
-  Plain,
-  Plain,
-  Plain,
-  Plain,
-  Pit,
-  Plain,
-  Plain,
-  Plain,
-  Plain,
-  Pit,
-  Plain,
-  Plain,
-  Plain,
-  Plain,
-  Plain
+local sections = {
+  SimpleGrassSection,
+  SimpleGrassSection,
+  GrassSection,
+  PitSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  PitSection,
+  GrassSection,
+  PitSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  PitSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  PitSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  GrassSection,
+  GrassSection
 }
 
-function LevelOne.new(chad)
-  local screenW = config.screenW
-  local group = display.newGroup()
+function LevelOne.new()
+  local startX = 0
+  local frames = {}
 
-  for i = 1, #series do
-    group:insert(series[i].new((i - 1) * screenW))
+  for i = 1, #sections do
+    local section = sections[i].new(startX)
+    for s = 1, #section do
+      local frame = section[s]
+      frames[#frames + 1] = frame
+    end
+    startX = startX + display.contentWidth
   end
 
-  function group:finalize()
-    group:removeEventListener("finalize")
-    Runtime:removeEventListener("enterFrame", onEnterFrame)
-  end
-
-  group:addEventListener("finalize")
-
-  local onEnterFrame = function()
-    local x = chad.x - (screenW / 2)
-    transition.cancel()
-    transition.to(group, {x=x, time=config.scrollTransitionTime})
-  end
-
-  Runtime:addEventListener("enterFrame", onEnterFrame)
-  return group
+  return frames
 end
 
 return LevelOne

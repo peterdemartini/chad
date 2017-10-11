@@ -5,7 +5,7 @@ local physics   = require "physics"
 
 local BlueSky = {}
 
-local screenW, screenH = config.screenW, config.screenH
+local screenW, screenH = display.contentWidth, display.contentHeight
 
 function BlueSky.new(startX)
   local rect = display.newRect(display.contentCenterX, display.contentCenterY, screenW, screenH)
