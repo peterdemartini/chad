@@ -10,7 +10,7 @@ local screenW, screenH = display.contentWidth, display.contentHeight
 local chad, touchObject, runnerButtons, frames
 local destroyed = false
 local runtime = 0
-local scrollSpeed = 5
+local scrollSpeed = 8
 
 local scene = composer.newScene()
 physics.start(); physics.pause()
@@ -52,10 +52,14 @@ end
 
 local function onEnterFrame(event)
 	local dt = getDeltaTime()
-	chad:toFront()
+	if chad and not chad.isDead then
+		chad:toFront()
+	end
 	local moveX = -(scrollSpeed * dt)
 	for i = 1, #frames do
-		frames[i]:translate(moveX, 0)
+		if frames[i] and frames[i].x then
+			frames[i]:translate(moveX, 0)
+		end
 	end
 end
 
@@ -123,7 +127,7 @@ function scene:destroy(event)
 	runnerButtons:removeSelf()
 	chad:removeSelf()
 	for i = 1, #frames do
-		frames[i].removeSelf()
+		frames[i]:removeSelf()
 	end
 
 	destroyed = true

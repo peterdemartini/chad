@@ -68,13 +68,17 @@ function ChadCharacter.new()
 		body:removeEventListener("collision")
 		Runtime:removeEventListener("touch", onJumpEvent)
 		Runtime:removeEventListener("enterFrame", onEnterFrame)
-		body = nil
+	end
+
+	local function gameOver()
+		body.isDead = true
+		body:dispatchEvent({ name="dead" })
 	end
 
 	local function onEnterFrame()
-		if body and body.x < display.screenOriginX then
+		if body and not body.isDead and body.x < display.screenOriginX then
 			body.isDead = true
-			body:dispatchEvent({name="dead"})
+			timer.performWithDelay(100, gameOver)
 		end
 	end
 

@@ -1,5 +1,5 @@
 return {
-  debugPhysics=true,
+  debugPhysics=false,
   debug='*',
   groundHeight=85,
   currentPosition=0,
