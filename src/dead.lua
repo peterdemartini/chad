@@ -59,7 +59,6 @@ function scene:create( event )
 	playBtnShadow.x = (display.contentWidth * 0.5) + 5
 	playBtnShadow.y = (display.contentHeight * 0.85) + 5
 
-
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleShadow )
 	sceneGroup:insert( title )

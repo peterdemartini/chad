@@ -1,11 +1,13 @@
-local debug       = require('src.debug')('plain-section')
-local PlainGrass  = require 'src.statics.plain-grass'
-local BlueSky     = require 'src.statics.blue-sky'
-local config      = require 'src.config'
+local physics    = require 'physics'
+local PlainGrass = require 'src.statics.plain-grass'
+local BlueSky    = require 'src.statics.blue-sky'
+local config     = require 'src.config'
+local debug      = require('src.debug')('plain-section')
 
 local Plain = {}
 
 local screenW, screenH = config.screenW, config.screenH
+local sectionWidth = (screenW / 3)
 math.randomseed(os.time())
 
 function generateChunk(startX)
@@ -19,48 +21,20 @@ function generateChunk(startX)
   return PlainGrass.new(x,y+10,width,height)
 end
 
-function Plain.new(sceneGroup, startX)
-  debug('building...', startX)
-  local physics = require 'physics'
-  local self = {}
-  self.items = {}
+function Plain.new(startX)
+  local group = display:newGroup()
 
-  self.build = function()
-    self.items[1] = BlueSky.new(startX)
-    sceneGroup:insert(self.items[1].getBody())
+  group:insert(BlueSky.new(startX))
+  group:insert(PlainGrass.new(startX, screenH, screenW, config.groundHeight))
+  group:insert(generateChunk(startX))
 
-    self.items[2] = PlainGrass.new(startX, screenH, screenW, config.groundHeight)
-    sceneGroup:insert(self.items[2].getBody())
-
-    self.items[3] = generateChunk(startX)
-    sceneGroup:insert(self.items[3].getBody())
+  function group:finalize()
+    group:removeEventListener("finalize")
   end
 
-  self.destroy = function()
-    debug('destroying...')
-    for i=1, #self.items do
-      self.items[i].destroy()
-      self.items[i] = nil
-    end
-    if package[physics] ~= nil then
-      package[physics] = nil
-    end
-    physics = nil
-  end
+  group:addEventListener("finalize")
 
-  self.moveX = function(x)
-    for i=1, #self.items do
-      self.items[i].moveX(x)
-    end
-  end
-
-  self.cancel = function()
-    for i=1, #self.items do
-      self.items[i].cancel()
-    end
-  end
-
-  return self
+  return group
 end
 
 return Plain

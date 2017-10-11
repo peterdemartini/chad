@@ -1,31 +1,14 @@
+local RestartButton = require 'src.buttons.restart'
+local PlayPauseButton = require 'src.buttons.play-pause'
 local RunnerButtons = {}
 
 function RunnerButtons.new(buttonActions)
-  local self = {}
-  local RestartButton = require 'src.buttons.restart'
-  local PlayPauseButton = require 'src.buttons.play-pause'
-  local jumpButton, restartButton, playPauseButton
+  local group = display.newGroup()
 
-  self.build = function()
-    restartButton = RestartButton.new(buttonActions.onRestartEvent)
-    restartButton.build()
+  group:insert(RestartButton.new(buttonActions.onRestartEvent))
+  group:insert(PlayPauseButton.new(buttonActions.onPlayEvent, buttonActions.onPauseEvent))
 
-    playPauseButton = PlayPauseButton.new(buttonActions.onPlayEvent, buttonActions.onPauseEvent)
-    playPauseButton.build()
-  end
-
-  self.destroy = function()
-    restartButton.destroy()
-    package.loaded[RestartButton] = nil
-    RestartButton = nil
-    restartButton = nil
-
-    playPauseButton.destroy()
-    package.loaded[PlayPauseButton] = nil
-    PlayPauseButton = nil
-    playPauseButton = nil
-  end
-  return self
+  return group
 end
 
 return RunnerButtons

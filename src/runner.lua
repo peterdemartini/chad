@@ -1,11 +1,10 @@
-local config   = require 'src.config'
-local composer = require 'composer'
-local physics  = require 'physics'
-
+local config        = require 'src.config'
+local composer      = require 'composer'
+local physics       = require 'physics'
 local Chad          = require 'src.characters.chad'
 local Actions       = require 'src.actions.defaults'
-local Wall          = require 'src.invisibles.wall'
-local FrameMaster   = require 'src.frame-master'
+local Walls         = require 'src.invisibles.walls'
+local LevelOne      = require 'src.levels.one'
 local RunnerButtons = require 'src.buttons.runner-buttons'
 local debug         = require('src.debug')('runner')
 
@@ -18,6 +17,7 @@ local destroyed = false
 
 local scene = composer.newScene()
 physics.start(); physics.pause()
+physics.setGravity( 0, 32 )
 
 if config.debugPhysics then
 	debug('Setting Draw Mode to Hybrid')
@@ -37,14 +37,12 @@ function chadDied()
 end
 
 local function onPauseEvent()
-	frameMaster.pause()
 	actions.pause()
 	physics.pause()
 	return true
 end
 
 local function onPlayEvent()
-	frameMaster.play()
 	actions.play()
 	physics.start()
 	return true
@@ -52,19 +50,13 @@ end
 
 function scene:setFixedStatics()
 	local sceneGroup = self.view
-	fixedStatics[1] = Wall.new('top')
-  fixedStatics[2] = Wall.new('left')
-  fixedStatics[3] = Wall.new('right')
-
-  sceneGroup:insert(fixedStatics[1].getBody())
-  sceneGroup:insert(fixedStatics[2].getBody())
-  sceneGroup:insert(fixedStatics[3].getBody())
+  sceneGroup:insert(Walls.new())
 end
 
 function scene:updateFixedStatics(currentX)
 	for i = 1, #fixedStatics do
 		local static = fixedStatics[i]
-		static.update(currentX)
+		static:toFront()
 	end
 end
 
@@ -78,10 +70,10 @@ function scene:create(event)
 	scene:setFixedStatics()
 
 	chad = Chad.new(screenW / 5, screenH - 75)
-	sceneGroup:insert(chad.getBody())
+	sceneGroup:insert(chad)
 
-	frameMaster = FrameMaster.new(chad, sceneGroup)
-	frameMaster.build()
+	local levelOne = LevelOne.new(sceneGroup, chad)
+	sceneGroup:insert(levelOne)
 
 	local buttonActions = {
 		onPlayEvent=onPlayEvent,
@@ -90,7 +82,7 @@ function scene:create(event)
 	}
 
 	runnerButtons = RunnerButtons.new(buttonActions)
-	runnerButtons.build()
+	sceneGroup:insert(runnerButtons)
 
 	actions = Actions.new(chad, chadDied)
 	destroyed = false
@@ -98,7 +90,7 @@ end
 
 function scene:enterFrame(event)
 	if chad ~= nil then
-		chad.toFront()
+		chad:toFront()
 	end
 end
 
@@ -132,21 +124,13 @@ function scene:destroy(event)
 	end
 	debug('Scene is being destroyed')
 
-	for i = 1, #fixedStatics do
-		fixedStatics[i].destroy()
-		fixedStatics[i] = nil
-	end
-
-	frameMaster.destroy()
 	actions.destroy()
-	chad.destroy()
-	runnerButtons.destroy()
 
-	frameMaster = nil
-	actions = nil
-	chad = nil
+	fixedStatics:removeSelf()
+	chad:removeSelf()
+	runnerButtons:removeSelf()
+
 	destroyed = true
-	-- sceneGroup:removeSelf()
 end
 
 scene:addEventListener("create", scene)
