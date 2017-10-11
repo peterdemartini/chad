@@ -1,6 +1,6 @@
 local physics    = require 'physics'
-local PlainGrass = require 'src.statics.plain-grass'
-local BlueSky    = require 'src.statics.blue-sky'
+local PlainGrass = require 'src.frames.plain-grass'
+local BlueSky    = require 'src.frames.blue-sky'
 local config     = require 'src.config'
 local debug      = require('src.debug')('plain-section')
 

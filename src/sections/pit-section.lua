@@ -1,7 +1,7 @@
 local debug      = require('src.debug')('pit-section')
-local PitHole    = require 'src.statics.pit-hole'
-local PlainGrass = require 'src.statics.plain-grass'
-local BlueSky    = require 'src.statics.blue-sky'
+local PitHole    = require 'src.frames.pit-hole'
+local PlainGrass = require 'src.frames.plain-grass'
+local BlueSky    = require 'src.frames.blue-sky'
 local config     = require 'src.config'
 local physics    = require 'physics'
 
