@@ -36,7 +36,7 @@ function ChadCharacter.new()
 	body.isStoppable = true
 
 	local function onJumpEvent(event)
-		if body.jumpCount > 2 then
+		if body.jumpCount >= 2 then
 			return
 		end
 		if event.phase == "began" then
@@ -48,18 +48,23 @@ function ChadCharacter.new()
 		end
 	end
 
+	local function die()
+		body.isDead = true
+		body:dispatchEvent({ name="dead" })
+	end
+
 	function body:collision(event)
-		debug("collision", event.phase, event.other.name, self.name)
 		if event.other.willStop then
 			if event.phase == "began" then
+				debug("will stop chad", event.phase, event.other.name, self.name)
 				self.jumping = false
 				self.jumpCount = 0
 			end
 		end
 		if event.other.willKill then
 			if event.phase == "began" then
-				self.isDead = true
-				self:dispatchEvent({ name="dead" })
+				debug("will kill chad", event.phase, event.other.name, self.name)
+				die()
 			end
 		end
 	end
@@ -70,15 +75,10 @@ function ChadCharacter.new()
 		Runtime:removeEventListener("enterFrame", onEnterFrame)
 	end
 
-	local function gameOver()
-		body.isDead = true
-		body:dispatchEvent({ name="dead" })
-	end
-
 	local function onEnterFrame()
 		if body and not body.isDead and body.x < display.screenOriginX then
 			body.isDead = true
-			timer.performWithDelay(100, gameOver)
+			timer.performWithDelay(100, die)
 		end
 	end
 

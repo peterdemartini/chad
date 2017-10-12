@@ -36,7 +36,7 @@ local sections = {
 }
 
 function LevelOne.new()
-  local startX = 0
+  local startX = display.screenOriginX
   local frames = {}
 
   for i = 1, #sections do

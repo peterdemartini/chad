@@ -5,8 +5,6 @@ local physics   = require "physics"
 
 local PitHole = {}
 
-local screenW, screenH = display.contentWidth, display.contentHeight
-
 function PitHole.new(startX, startY, width, height)
   local rect = display.newRect((startX + (width  / 2)), (startY + (height  / 2)), width, height)
   rect.fill = {type="image", filename=imagePath('pit-hole.png')}

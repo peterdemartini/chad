@@ -6,11 +6,9 @@ local LevelOne      = require 'src.levels.one'
 local RunnerButtons = require 'src.buttons.runner-buttons'
 local debug         = require('src.debug')('runner')
 
-local screenW, screenH = display.contentWidth, display.contentHeight
-local chad, touchObject, runnerButtons, frames
-local destroyed = false
+local chad, runnerButtons, frames
 local runtime = 0
-local scrollSpeed = 8
+local scrollSpeed = 10
 
 local scene = composer.newScene()
 physics.start(); physics.pause()
@@ -22,13 +20,15 @@ if config.debugPhysics then
 end
 
 function onRestartEvent()
-	scene:destroy()
-	composer.gotoScene("src.reloading", "fade", 100)
+	local sceneName = composer.getSceneName("current")
+	composer.removeScene(sceneName)
+	composer.gotoScene(sceneName, "fade", 100)
 	return true
 end
 
 function onDeath()
-	scene:destroy()
+	local sceneName = composer.getSceneName("current")
+	composer.removeScene(sceneName)
 	composer.gotoScene("src.dead", "fade", 100)
 	return true
 end
@@ -44,10 +44,14 @@ local function onPlayEvent()
 end
 
 local function getDeltaTime()
-   local temp = system.getTimer()
-   local dt = (temp-runtime) / (1000/60)
-   runtime = temp
-   return dt
+	local temp = system.getTimer()
+	local dt = (temp-runtime) / (1000/60)
+	runtime = temp
+	if dt > 10 then
+		return 10
+	else
+		return dt
+	end
 end
 
 local function onEnterFrame(event)
@@ -64,73 +68,57 @@ local function onEnterFrame(event)
 end
 
 function scene:create(event)
-	debug('Creating scene')
 	local sceneGroup = self.view
+	debug("scene create")
 
 	composer.removeScene('src.dead', true)
 	composer.removeScene('src.reloading')
-
-	chad = Chad.new()
-	chad:addEventListener("dead", onDeath)
-	sceneGroup:insert(chad)
 
 	frames = LevelOne.new()
 	for i = 1, #frames do
 		sceneGroup:insert(frames[i])
 	end
+
 	runnerButtons = RunnerButtons.new()
 	runnerButtons:addEventListener("play", onPlayEvent)
 	runnerButtons:addEventListener("pause", onPauseEvent)
 	runnerButtons:addEventListener("restart", onRestartEvent)
 	sceneGroup:insert(runnerButtons)
-	destroyed = false
 end
 
 function scene:show(event)
 	local sceneGroup = self.view
+	if event.phase == "will" then
+		chad = Chad.new()
+		chad:addEventListener("dead", onDeath)
+		sceneGroup:insert(chad)
+	end
 	if event.phase == "did" then
-		Runtime:addEventListener('enterFrame', onEnterFrame)
-		debug('Scene did show')
-		if not destroyed then
-			onPlayEvent()
-		end
+		onPlayEvent()
+		runtime = 0
+		Runtime:addEventListener("enterFrame", onEnterFrame)
 	end
 end
 
 function scene:hide(event)
-	local sceneGroup = self.view
-
 	if event.phase == "will" then
-		debug('Scene will hide')
-		if not destroyed then
-			Runtime:addEventListener('enterFrame', onEnterFrame)
-			onPauseEvent()
-		end
+		onPauseEvent()
+		runtime = 0
+		Runtime:addEventListener("enterFrame", onEnterFrame)
 	end
 end
 
 function scene:destroy(event)
-	local sceneGroup = self.view
-	if destroyed then
-		debug('Scene already destroyed')
-		return
-	end
-	debug('Scene is being destroyed')
+	debug("scene destroy")
 	chad:removeEventListener("dead", onDeath)
 	runnerButtons:removeEventListener("play", onPlayEvent)
 	runnerButtons:removeEventListener("pause", onPauseEvent)
 	runnerButtons:removeEventListener("restart", onRestartEvent)
-	scene:removeEventListener("create")
-	scene:removeEventListener("show")
-	scene:removeEventListener("hide")
-	scene:removeEventListener("destroy")
 	runnerButtons:removeSelf()
 	chad:removeSelf()
 	for i = 1, #frames do
 		frames[i]:removeSelf()
 	end
-
-	destroyed = true
 end
 
 scene:addEventListener("create")
